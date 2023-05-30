@@ -1,0 +1,6 @@
+**/target/
+**/myfoods.war
+**/.classpath
+**/.project
+**/.settings/
+**/logs/
