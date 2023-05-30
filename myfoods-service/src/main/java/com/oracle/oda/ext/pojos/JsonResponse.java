@@ -34,31 +34,31 @@ import org.springframework.http.ResponseEntity;
 public class JsonResponse {
 	private String status;
 	private int code;
-	private Object payload;
+	private Object items;
 	private String error;
 	private int offset = 0;
 	private int limit = 0;
 
-	public JsonResponse() { 
+	public JsonResponse() {
 	}
- 
+
 	public JsonResponse(String status, HttpStatus oCode) {
 		this.status = status;
 		this.code = oCode.value();
-		this.payload = null;
+		this.items = null;
 	}
 
 	public JsonResponse(String status, HttpStatus oCode, String error) {
 		this.status = status;
 		this.code = oCode.value();
-		this.payload = null;
+		this.items = null;
 		this.error = error;
 	}
 
 	public JsonResponse(String status, HttpStatus oCode, Object payload) {
 		this.status = status;
 		this.code = oCode.value();
-		this.payload = payload;
+		this.items = payload;
 	}
 
 	public static JsonResponse inst(String status, HttpStatus oCode) {
@@ -114,15 +114,15 @@ public class JsonResponse {
 	/**
 	 * @return the payload
 	 */
-	public Object getPayload() {
-		return payload;
+	public Object getItems() {
+		return items;
 	}
 
 	/**
 	 * @param payload the payload to set
 	 */
-	public void setPayload(Object payload) {
-		this.payload = payload;
+	public void setItems(Object payload) {
+		this.items = payload;
 	}
 
 	/**
@@ -168,6 +168,6 @@ public class JsonResponse {
 	 */
 	@Override
 	public String toString() {
-		return "JsonResponse [status=" + status + ", code=" + code + ", payload=" + payload + "]";
+		return "JsonResponse [status=" + status + ", code=" + code + ", items=" + items + "]";
 	}
 }

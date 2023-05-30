@@ -16,6 +16,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.oracle.oda.ext.pojos.CustomerOrder;
 import com.oracle.oda.ext.pojos.GeoJson;
+import com.oracle.oda.ext.pojos.MlObj;
 import com.oracle.oda.ext.pojos.OnlineOrder;
  
  /***************************************************************************
@@ -40,9 +41,13 @@ import com.oracle.oda.ext.pojos.OnlineOrder;
 
 @Mapper
 public interface FoodsMapper {
-    List<GeoJson> list(@Param("longitude") float longitude, @Param("latitude") float latitude);
+    GeoJson getShops(@Param("longitude") float longitude, @Param("latitude") float latitude);
 
     void insertOnlineOrder(OnlineOrder o);
 
     void insertCustomerOrder(CustomerOrder o);
-}
+
+    List<MlObj> ml(@Param("item") String item);
+
+    List<CustomerOrder> listCustomerOrders();
+} 

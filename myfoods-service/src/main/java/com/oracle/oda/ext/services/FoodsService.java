@@ -20,6 +20,7 @@ import com.oracle.oda.ext.dao.FoodsMapper;
 import com.oracle.oda.ext.exceptions.ApplicationException;
 import com.oracle.oda.ext.pojos.CustomerOrder;
 import com.oracle.oda.ext.pojos.GeoJson;
+import com.oracle.oda.ext.pojos.MlObj;
 import com.oracle.oda.ext.pojos.OnlineOrder;
 import com.oracle.oda.ext.utils.DateUtil;
 import com.oracle.oda.ext.utils.StringUtil;
@@ -44,15 +45,15 @@ import com.oracle.oda.ext.utils.StringUtil;
  * </PRE>
  ***************************************************************************/
 @Service
-public class FoodsService { 
+public class FoodsService {
     private static final Logger LOGGER = LoggerFactory.getLogger(FoodsService.class);
 
     @Autowired
     private FoodsMapper mapper;
 
-    public List<GeoJson> list(float longitude, float latitude) {
+    public GeoJson listshops(float longitude, float latitude) {
         try {
-            return mapper.list(longitude, latitude);
+            return mapper.getShops(longitude, latitude);
         } catch (Exception e) {
             LOGGER.error("!!! list failed: ", e);
             throw new ApplicationException(e);
@@ -61,12 +62,12 @@ public class FoodsService {
 
     public void insertOnlineOrder(OnlineOrder o) throws ApplicationException {
         LOGGER.info("*** Inserting OnlineOrder: " + o);
-        if(StringUtil.isBlank(o.getId())) {
-			o.setId(StringUtil.uuid());
-		}
-		if(o.getDt() == null) {
-			o.setDt(DateUtil.nowTs());
-		}
+        if (StringUtil.isBlank(o.getId())) {
+            o.setId(StringUtil.uuid());
+        }
+        if (o.getDt() == null) {
+            o.setDt(DateUtil.nowTs());
+        }
         try {
             mapper.insertOnlineOrder(o);
         } catch (Exception e) {
@@ -81,6 +82,24 @@ public class FoodsService {
             mapper.insertCustomerOrder(o);
         } catch (Exception e) {
             LOGGER.error("!!! Error saving CustomerOrder: " + o, e);
+            throw new ApplicationException(e);
+        }
+    }
+
+    public List<MlObj> ml(String item) {
+        try {
+            return mapper.ml(item);
+        } catch (Exception e) {
+            LOGGER.error("!!! ml failed: ", e);
+            throw new ApplicationException(e);
+        }
+    }
+
+    public List<CustomerOrder> listCustomerOrders() {
+        try {
+            return mapper.listCustomerOrders();
+        } catch (Exception e) {
+            LOGGER.error("!!! listCustomerOrders failed: ", e);
             throw new ApplicationException(e);
         }
     }

@@ -17,9 +17,6 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<mybatis.springboot.version>2.1.4</mybatis.springboot.version>
-		<javacsv.version>2.0</javacsv.version>
-		<mysql.version>8.0.12</mysql.version>
-		<poi.version>4.1.2</poi.version>
 	</properties>
 
 	<dependencies>

@@ -1005,8 +1005,15 @@
       card = document.getElementById("card").value;
       console.log(card);
 
-      URL = "http://129.154.214.178:7001/ords/ws_shard/myfoods/frontend?phone="+phone+"&name="+fname+"&location="+address+"&card="+card;
+      // URL = "http://129.154.214.178:7001/ords/ws_shard/myfoods/frontend?phone="+phone+"&name="+fname+"&location="+address+"&card="+card;
+      URL = "http://129.154.214.178:7001/myfoods-service/api/insertcustomerorder"
 
+      var orderobj = '{'
+        +'"name"  : "'+fname+'",'
+        +'"phone" : "'+phone+'",'
+        +'"location" : "'+address+'",'
+        +'"card" : "'+card+'"'
+        +'}';
 
       const xhr = new XMLHttpRequest();
       xhr.open('PUT', URL);
@@ -1029,7 +1036,7 @@
       var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
       var yyyy = today.getFullYear();
       today = mm + '-' + dd + '-' + yyyy;
-      var time  = new Date(new Date().getTime() + 4*60*60*1000).toLocaleTimeString();
+      var time  = Date.now().toLocaleString()
 
       for (let i = 0; i < jsonItemsCountArray.length; i++) {
         let obj = jsonItemsCountArray[i];
@@ -1047,22 +1054,23 @@
 
 
         var orderobj = '{'
-       +'"ORDERDATE" : "'+_orderdate+'",'
-       +'"ORDERTIME"  : "'+_ordertime+'",'
-       +'"ORDER_LINEID" : "'+_orderlineid+'",'
-       +'"ORDERQUANTITY" : "'+_orderquantity+'",'
-       +'"ITEMID" : "'+_itemid+'",'
-       +'"ORDERAMOUNT" : "'+_orderamount+'",'
-       +'"ORDERID" : "'+_orderid+'",'
-       +'"LATITUDE" : "'+_lat+'",'
-       +'"LONGITUDE" : "'+_long+'"'
+      //  +'"ORDERDATE" : "'+_orderdate+'",'
+      //  +'"ORDERTIME"  : "'+_ordertime+'",'
+       +'"orderDateTime"  : "'+_ordertime+'",'
+       +'"lineId" : "'+_orderlineid+'",'
+       +'"quantity" : "'+_orderquantity+'",'
+       +'"itemId" : "'+_itemid+'",'
+       +'"amount" : "'+_orderamount+'",'
+       +'"orderId" : "'+_orderid+'",'
+       +'"latitude" : "'+_lat+'",'
+       +'"longitude" : "'+_long+'"'
        +'}';
 
  
 
 
        // var dist = "5000";
-      URL = "http://129.154.214.178:7001/ords/ws_shard/myfoods/frontend";
+      URL = "http://129.154.214.178:7001/myfoods-service/api/insertonlineorder";
 
 
       const xhr = new XMLHttpRequest();
@@ -1137,7 +1145,7 @@
       // GET ML items
 
       // var dist = "5000";
-      URL = "http://129.154.214.178:7001/ords/ws_shard/myfoods/ml?item=" + _food.toLowerCase();
+      URL = "http://129.154.214.178:7001/myfoods-service/api/ml?item=" + _food.toLowerCase();
       //URL = "https://api.github.com/users/hadley/orgs"
 
       const xhr = new XMLHttpRequest();
@@ -1280,7 +1288,7 @@
       var lng = _latLong.lng;
       let dist = "10000000000000000000000";
       // var dist = "5000";
-      URL = "http://129.154.214.178:7001/ords/ws_shard/myfoods/frontend?long=" + lng + "&lat=" + lat;
+      URL = "http://129.154.214.178:7001/myfoods-service/api/listshops?long=" + lng + "&lat=" + lat;
       //URL = "https://api.github.com/users/hadley/orgs"
 
 

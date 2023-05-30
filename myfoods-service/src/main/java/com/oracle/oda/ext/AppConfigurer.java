@@ -33,7 +33,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * </PRE>
  ***************************************************************************/
 @Configuration
-public class BotGatewayConfigurer implements WebMvcConfigurer {
+public class AppConfigurer implements WebMvcConfigurer {
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**").allowedMethods("GET", "POST", "PATCH", "PUT", "DELETE");
 	}
