@@ -29,22 +29,22 @@ package com.oracle.oda.ext.pojos;
  * </PRE>
  ***************************************************************************/
 public class GeoJson {
-    private String mediaType;
-    private String geoJson;
+    private String mediatype;
+    private String geojson;
 
-    public String getMediaType() {
-        return mediaType;
+    public String getMediatype() {
+        return mediatype;
     }
 
-    public String getGeoJson() {
-        return geoJson;
-    } 
-
-    public void setMediaType(String mediaType) {
-        this.mediaType = mediaType;
+    public void setMediatype(String mediatype) {
+        this.mediatype = mediatype;
     }
 
-    public void setGeoJson(String geoJson) {
-        this.geoJson = geoJson;
+    public String getGeojson() {
+        return geojson;
+    }
+
+    public void setGeojson(String geojson) {
+        this.geojson = geojson;
     }
 }

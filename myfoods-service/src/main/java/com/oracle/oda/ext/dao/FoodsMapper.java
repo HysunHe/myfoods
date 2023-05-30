@@ -41,7 +41,7 @@ import com.oracle.oda.ext.pojos.OnlineOrder;
 
 @Mapper
 public interface FoodsMapper {
-    GeoJson getShops(@Param("longitude") float longitude, @Param("latitude") float latitude);
+    List<GeoJson> getShops(@Param("longitude") float longitude, @Param("latitude") float latitude);
 
     void insertOnlineOrder(OnlineOrder o);
 

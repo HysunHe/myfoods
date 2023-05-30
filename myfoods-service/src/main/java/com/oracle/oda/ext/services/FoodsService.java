@@ -51,7 +51,7 @@ public class FoodsService {
     @Autowired
     private FoodsMapper mapper;
 
-    public GeoJson listshops(float longitude, float latitude) {
+    public List<GeoJson> listshops(float longitude, float latitude) {
         try {
             return mapper.getShops(longitude, latitude);
         } catch (Exception e) {

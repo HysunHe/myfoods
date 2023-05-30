@@ -158,7 +158,7 @@ public class JsonResponse {
 	}
 
 	public ResponseEntity<String> toResponseText() {
-		return ResponseEntity.status(this.getCode()).body(this.status);
+		return ResponseEntity.status(this.getCode()).body(this.toString());
 	}
 
 	/*
