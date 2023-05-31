@@ -432,7 +432,7 @@
 
 
 
-
+  <input type="hidden" id="sel_country_code" value="" />
 
   <!-- Top menu -->
   <div class="w3-top">
@@ -1004,11 +1004,14 @@
       console.log(address);
       card = document.getElementById("card").value;
       console.log(card);
+      countryCode = document.getElementById("sel_country_code").value;
+      console.log(countryCode);
 
       // URL = "http://129.154.214.178:7001/ords/ws_shard/myfoods/frontend?phone="+phone+"&name="+fname+"&location="+address+"&card="+card;
       URL = "http://129.154.214.178:7001/myfoods-service/api/insertcustomerorder"
 
       var orderobj = '{'
+        +'"countryCode"  : "'+countryCode+'",'
         +'"name"  : "'+fname+'",'
         +'"phone" : "'+phone+'",'
         +'"location" : "'+address+'",'
@@ -1037,6 +1040,7 @@
       var yyyy = today.getFullYear();
       today = mm + '-' + dd + '-' + yyyy;
       var time  = Date.now().toLocaleString()
+      var countryCode = document.getElementById("sel_country_code").value;
 
       for (let i = 0; i < jsonItemsCountArray.length; i++) {
         let obj = jsonItemsCountArray[i];
@@ -1055,17 +1059,16 @@
 
 
         var orderobj = '{'
-      //  +'"ORDERDATE" : "'+_orderdate+'",'
-      //  +'"ORDERTIME"  : "'+_ordertime+'",'
-       +'"orderDateTime"  : "'+now+'",'
-       +'"lineId" : "'+_orderlineid+'",'
-       +'"quantity" : "'+_orderquantity+'",'
-       +'"itemId" : "'+_itemid+'",'
-       +'"amount" : "'+_orderamount+'",'
-       +'"orderId" : "'+_orderid+'",'
-       +'"latitude" : "'+_lat+'",'
-       +'"longitude" : "'+_long+'"'
-       +'}';
+          +'"countryCode"  : "'+countryCode+'",'
+          +'"orderDateTime"  : "'+now+'",'
+          +'"lineId" : "'+_orderlineid+'",'
+          +'"quantity" : "'+_orderquantity+'",'
+          +'"itemId" : "'+_itemid+'",'
+          +'"amount" : "'+_orderamount+'",'
+          +'"orderId" : "'+_orderid+'",'
+          +'"latitude" : "'+_lat+'",'
+          +'"longitude" : "'+_long+'"'
+          +'}';
 
  
 
@@ -1369,7 +1372,7 @@
         for (let i = 0; i < jsonArray.length; i++) {
           let obj = jsonArray[i];
           //var rowData = "<tr style=padding:25px;><td>" + obj.properties.ogr_fid + "</td><td>" + obj.properties.distance_m + "</td></tr>";
-          var rowData = "<br> <div class=card><input type=radio name=JTP id=" + i + " value='" + obj.properties.store_address + "'><br><b>&nbsp; " + obj.properties.store_name + " </b><br>" + obj.properties.store_address + "<br>" + Math.round(obj.properties.distance_m) + "m </div> ";
+          var rowData = "<br> <div class=card><input type=radio name=JTP data-country-code=" + obj.properties.country_code + " id=" + i + " value='" + obj.properties.store_address + "'><br><b>&nbsp; " + obj.properties.store_name + " </b><br>" + obj.properties.store_address + "<br>" + Math.round(obj.properties.distance_m) + "m </div> ";
           // Store the value in 'table'
           table += rowData;
         }
@@ -1389,6 +1392,8 @@
 
       restaurant_id = null;
       restaurant_address = document.querySelector('input[name="JTP"]:checked').value;
+      country_code = document.querySelector('input[name="JTP"]:checked').attributes['data-country-code'].value
+      document.getElementById("sel_country_code").value = country_code;
       restaurant_latlng = null;
     }
 

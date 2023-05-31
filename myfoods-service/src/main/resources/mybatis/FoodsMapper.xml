@@ -6,6 +6,7 @@
 	<select id="getShops" resultType="com.oracle.oda.ext.pojos.GeoJson">
         with x as (SELECT
             t1.pk_col,
+            t1.country_code,
             t1.pin_code,
             t1.store_address,
             t1.store_name,
@@ -29,6 +30,7 @@
             || JSON_ARRAYAGG(
                 '{"type": "Feature", "properties": {'
                 || '"pk_col":"'|| pk_col
+                ||'","country_code":"'|| country_code
                 ||'","pin_code":"'|| pin_code
                 ||'","store_address":"'|| store_address
                 ||'","store_name":"'|| store_name

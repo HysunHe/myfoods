@@ -58,12 +58,12 @@ CREATE TABLE  "ONLINE_STORES"(
 ) 
 
 
-insert into ONLINE_STORES(pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES (110, 247911, '29 Tanglin Road, Lobby Floor, St. Regis Hotel, Singapore 247911', 'yellowstore',1.3428,103.8854);
-insert into ONLINE_STORES(pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES (4, 178882, '2 Stamford Rd, Level 70, Swiss The Stamford, Singapore 178882', 'bluestore', 1.3057, 103.8243);
-insert into ONLINE_STORES(pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES (97, 228208, '1 Scotts Road, #01-16 Shaw Centre, Singapore 228208', 'freshstore', 1.3798, 103.8497);
-insert into ONLINE_STORES(pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES (48, 88461, '38 Tanjong Pagar Road, Singapore 088461', 'seastore', 1.3545, 103.7755);
-insert into ONLINE_STORES(pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES (53, 18972, '2 Bayfront Avenue B1-71, Galleria Level The Shoppes at Marina Bay Sands, Singapore 018972', 'organicstore', 1.4018, 103.7769);
-insert into ONLINE_STORES(pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES (50, 18956, 'Level 2 Dining, L2-01 The Shoppes at Marina Bay Sands, 2 Bayfront Ave, Singapore 018956', 'onlinestore', 1.4025, 103.7549);
+insert into ONLINE_STORES(country_code, pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES ('SGP', 110, 247911, '29 Tanglin Road, Lobby Floor, St. Regis Hotel, Singapore 247911', 'yellowstore',1.3428,103.8854);
+insert into ONLINE_STORES(country_code, pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES ('SGP', 4, 178882, '122 Windsor Park Rd, Singapore 574182', 'bluestore', 1.3557, 103.8243);
+insert into ONLINE_STORES(country_code, pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES ('AUS', 97, 228208, '204 Sussex St, Sydney NSW 2000, Australia', 'freshstore', -33.8714, 151.2043);
+insert into ONLINE_STORES(country_code, pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES ('AUS', 48, 88461, '163 Crown St, Darlinghurst NSW 2010, Australia', 'seastore', -33.8768, 151.2155);
+insert into ONLINE_STORES(country_code, pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES ('IND', 53, 18972, 'MTNL Rd, Saki Naka, Mumbai, Maharashtra 400072, India', 'organicstore', 19.1005, 72.8812);
+insert into ONLINE_STORES(country_code, pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES ('IND', 50, 18956, '3RGW+7XH Mumbai, Maharashtra, India', 'onlinestore', 19.0757, 72.8475);
 
 
 create or replace function get_geometry_oo (json varchar2)
