@@ -1017,7 +1017,7 @@
 
       const xhr = new XMLHttpRequest();
       xhr.open('PUT', URL);
-  
+      xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
       xhr.send(orderobj);
 
       console.log(restaurant_id);
@@ -1041,6 +1041,7 @@
       for (let i = 0; i < jsonItemsCountArray.length; i++) {
         let obj = jsonItemsCountArray[i];
 
+        now = Date.now();
         _orderdate = today;
         _ordertime = time;
         _orderlineid = i + 1;
@@ -1049,7 +1050,7 @@
         _lat = customerlatlng.lat;
         _long = customerlatlng.lng;
         _itemid = obj.properties.name;
-        _orderid = new Date().getUTCMilliseconds();
+        _orderid = 'O' + (i+1) + "_" + now;
 
 
 

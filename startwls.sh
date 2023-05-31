@@ -1,7 +1,7 @@
 pid=`ps -ef | grep -i weblogic | awk '{print $2}'`
 if [[ ! -z "$pid" ]]
 then
-        kill -9 $pid > /dev/null
+        kill -9 $pid > /dev/null 2>&1
 fi
 
 out_file=`pwd`/wls.out

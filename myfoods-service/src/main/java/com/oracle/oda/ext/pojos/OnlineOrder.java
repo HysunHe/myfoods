@@ -37,7 +37,7 @@ public class OnlineOrder {
     private Timestamp dt;
     private String json;
 
-    private Timestamp orderDateTime;
+    private String orderDateTime;
     private String lineId;
     private Integer quantity;
     private String itemId;
@@ -78,12 +78,14 @@ public class OnlineOrder {
         this.countryCode = countryCode;
     }
 
-    public Timestamp getOrderDateTime() {
+    public String getOrderDateTime() {
         return orderDateTime;
     }
 
-    public void setOrderDateTime(Timestamp orderDateTime) {
+    public void setOrderDateTime(String orderDateTime) {
         this.orderDateTime = orderDateTime;
+        Timestamp ts = new Timestamp(Long.valueOf(orderDateTime));
+        this.dt = ts;
     }
 
     public String getLineId() {

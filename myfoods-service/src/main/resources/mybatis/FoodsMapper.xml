@@ -49,10 +49,10 @@
 			DATE_LOADED,
 			OO_DOCUMENT
 		) VALUES (
-            #{countryCode},
-			#{id},
-			#{dt},
-			#{json}
+            #{countryCode, jdbcType=VARCHAR},
+			#{id, jdbcType=VARCHAR},
+			#{dt, jdbcType=TIMESTAMP},
+			#{json, jdbcType=VARCHAR}
 		)
 	</insert>
 	
@@ -65,11 +65,11 @@
 			LOCATION,
 			CARD
 		) VALUES (
-			#{countryCode},
-			#{name},
-			#{phone},
-			#{location},
-			#{card}
+			#{countryCode, jdbcType=VARCHAR},
+			#{name, jdbcType=VARCHAR},
+			#{phone, jdbcType=VARCHAR},
+			#{location, jdbcType=VARCHAR},
+			#{card, jdbcType=VARCHAR}
 		)
 	</insert>
 
