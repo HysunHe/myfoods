@@ -17,8 +17,8 @@ import com.oracle.oda.ext.exceptions.ApplicationException;
 public class WlsUcpDataSource {
 	private static final Logger LOGGER = LoggerFactory.getLogger(WlsUcpDataSource.class);
 
-	@Bean
 	@Primary
+	@Bean(destroyMethod="")
 	public DataSource ds_ucp_myfoods() {
 		Context ctx = null;
 		try {

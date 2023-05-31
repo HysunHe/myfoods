@@ -95,4 +95,10 @@ public class MlObj {
         this.reverseConfidence = reverseConfidence;
     }
 
+    @Override
+    public String toString() {
+        return "MlObj [rank=" + rank + ", recommendation=" + recommendation + ", num=" + num + ", support=" + support
+                + ", confidence=" + confidence + ", lift=" + lift + ", reverseConfidence=" + reverseConfidence + "]";
+    }
+
 }

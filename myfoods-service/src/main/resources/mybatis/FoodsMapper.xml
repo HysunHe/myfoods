@@ -42,18 +42,28 @@
 	</select>
 
 	<insert id="insertOnlineOrder" parameterType="com.oracle.oda.ext.pojos.OnlineOrder">
-		INSERT INTO J_ONLINEORDER
+		INSERT INTO ONLINEORDER
 		(
             COUNTRY_CODE,
-			ID,
-			DATE_LOADED,
-			OO_DOCUMENT
+			ORDER_ID,
+			ORDER_DATETIME,
+			LINE_ID,
+            QUANTITY,
+            ITEM_ID,
+            AMOUNT,
+            LATITUDE,
+            LONGITUDE
 		) VALUES (
             #{countryCode, jdbcType=VARCHAR},
-			#{id, jdbcType=VARCHAR},
+			#{orderId, jdbcType=VARCHAR},
 			#{dt, jdbcType=TIMESTAMP},
-			#{json, jdbcType=VARCHAR}
-		)
+			#{lineId, jdbcType=VARCHAR},
+            #{quantity, jdbcType=INTEGER},
+            #{itemId, jdbcType=VARCHAR},
+            #{amount, jdbcType=DECIMAL},
+            #{latitude, jdbcType=DECIMAL},
+            #{longitude, jdbcType=DECIMAL}		
+        )
 	</insert>
 	
 	<insert id="insertCustomerOrder" parameterType="com.oracle.oda.ext.pojos.CustomerOrder">

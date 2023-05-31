@@ -75,5 +75,10 @@ public class CustomerOrder {
         this.countryCode = countryCode;
     }
 
+    @Override
+    public String toString() {
+        return "CustomerOrder [countryCode=" + countryCode + ", name=" + name + ", phone=" + phone + ", location="
+                + location + ", card=" + card + "]";
+    }
+
 }
- 

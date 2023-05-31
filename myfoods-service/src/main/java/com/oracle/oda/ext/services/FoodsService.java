@@ -62,8 +62,8 @@ public class FoodsService {
 
     public void insertOnlineOrder(OnlineOrder o) throws ApplicationException {
         LOGGER.info("*** Inserting OnlineOrder: " + o);
-        if (StringUtil.isBlank(o.getId())) {
-            o.setId(StringUtil.uuid());
+        if (StringUtil.isBlank(o.getOrderId())) {
+            o.setOrderId(StringUtil.uuid());
         }
         if (o.getDt() == null) {
             o.setDt(DateUtil.nowTs());

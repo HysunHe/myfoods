@@ -47,4 +47,10 @@ public class GeoJson {
     public void setGeojson(String geojson) {
         this.geojson = geojson;
     }
+
+    @Override
+    public String toString() {
+        return "GeoJson [mediatype=" + mediatype + ", geojson=" + geojson + "]";
+    }
+
 }

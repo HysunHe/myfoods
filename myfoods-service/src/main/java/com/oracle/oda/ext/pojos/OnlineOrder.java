@@ -12,6 +12,8 @@ package com.oracle.oda.ext.pojos;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
+import com.oracle.oda.ext.utils.StringUtil;
+
 /***************************************************************************
  * <PRE>
  *  Project Name    : bot-gateway-springboot
@@ -33,10 +35,7 @@ import java.sql.Timestamp;
  ***************************************************************************/
 public class OnlineOrder {
     private String countryCode;
-    private String id;
     private Timestamp dt;
-    private String json;
-
     private String orderDateTime;
     private String lineId;
     private Integer quantity;
@@ -46,28 +45,15 @@ public class OnlineOrder {
     private BigDecimal latitude;
     private BigDecimal longitude;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public Timestamp getDt() {
         return dt;
     }
 
     public void setDt(Timestamp dt) {
         this.dt = dt;
-    }
-
-    public String getJson() {
-        return json;
-    }
-
-    public void setJson(String json) {
-        this.json = json;
+        if (StringUtil.isBlank(orderDateTime) && dt != null) {
+            this.orderDateTime = String.valueOf(dt.getTime());
+        }
     }
 
     public String getCountryCode() {
@@ -84,8 +70,10 @@ public class OnlineOrder {
 
     public void setOrderDateTime(String orderDateTime) {
         this.orderDateTime = orderDateTime;
-        Timestamp ts = new Timestamp(Long.valueOf(orderDateTime));
-        this.dt = ts;
+        if (this.dt == null && !StringUtil.isBlank(orderDateTime)) {
+            Timestamp ts = new Timestamp(Long.valueOf(orderDateTime));
+            this.dt = ts;
+        }
     }
 
     public String getLineId() {
@@ -142,6 +130,13 @@ public class OnlineOrder {
 
     public void setLongitude(BigDecimal longitude) {
         this.longitude = longitude;
+    }
+
+    @Override
+    public String toString() {
+        return "OnlineOrder [countryCode=" + countryCode + ", dt=" + dt + ", lineId=" + lineId + ", quantity="
+                + quantity + ", itemId=" + itemId + ", amount=" + amount + ", orderId=" + orderId + ", latitude="
+                + latitude + ", longitude=" + longitude + "]";
     }
 
 }
