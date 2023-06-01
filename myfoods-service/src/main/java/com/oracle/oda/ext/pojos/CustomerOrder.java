@@ -34,6 +34,7 @@ public class CustomerOrder {
     private String phone;
     private String location;
     private String card;
+    private String orderId;
 
     public String getName() {
         return name;
@@ -73,6 +74,14 @@ public class CustomerOrder {
 
     public void setCountryCode(String countryCode) {
         this.countryCode = countryCode;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
     @Override

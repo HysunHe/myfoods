@@ -44,7 +44,7 @@
 	</select>
 
 	<insert id="insertOnlineOrder" parameterType="com.oracle.oda.ext.pojos.OnlineOrder">
-		INSERT INTO ONLINEORDER
+		INSERT INTO ONLINE_ORDER_ITEMS
 		(
             COUNTRY_CODE,
 			ORDER_ID,
@@ -69,19 +69,21 @@
 	</insert>
 	
 	<insert id="insertCustomerOrder" parameterType="com.oracle.oda.ext.pojos.CustomerOrder">
-		INSERT INTO CUSTOMERORDER
+		INSERT INTO CUSTOMER_ORDER
 		(
             COUNTRY_CODE,
 			NAME,
 			PHONE,
 			LOCATION,
-			CARD
+			CARD,
+            ORDER_ID
 		) VALUES (
 			#{countryCode, jdbcType=VARCHAR},
 			#{name, jdbcType=VARCHAR},
 			#{phone, jdbcType=VARCHAR},
 			#{location, jdbcType=VARCHAR},
-			#{card, jdbcType=VARCHAR}
+			#{card, jdbcType=VARCHAR},
+            #{orderId, jdbcType=VARCHAR}
 		)
 	</insert>
 

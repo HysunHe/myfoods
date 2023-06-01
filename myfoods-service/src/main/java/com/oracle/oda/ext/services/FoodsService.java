@@ -23,7 +23,6 @@ import com.oracle.oda.ext.pojos.GeoJson;
 import com.oracle.oda.ext.pojos.MlObj;
 import com.oracle.oda.ext.pojos.OnlineOrder;
 import com.oracle.oda.ext.utils.DateUtil;
-import com.oracle.oda.ext.utils.StringUtil;
 
 /***************************************************************************
  * <PRE>
@@ -62,9 +61,6 @@ public class FoodsService {
 
     public void insertOnlineOrder(OnlineOrder o) throws ApplicationException {
         LOGGER.info("*** Inserting OnlineOrder: " + o);
-        if (StringUtil.isBlank(o.getOrderId())) {
-            o.setOrderId(StringUtil.uuid());
-        }
         if (o.getDt() == null) {
             o.setDt(DateUtil.nowTs());
         }

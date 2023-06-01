@@ -1007,6 +1007,9 @@
       countryCode = document.getElementById("sel_country_code").value;
       console.log(countryCode);
 
+      now = Date.now();
+      orderid = 'O_' + now;
+
       // URL = "http://129.154.214.178:7001/ords/ws_shard/myfoods/frontend?phone="+phone+"&name="+fname+"&location="+address+"&card="+card;
       URL = "http://129.154.214.178:7001/myfoods-service/api/insertcustomerorder"
 
@@ -1015,6 +1018,7 @@
         +'"name"  : "'+fname+'",'
         +'"phone" : "'+phone+'",'
         +'"location" : "'+address+'",'
+        +'"orderId" : "'+orderid+'",'
         +'"card" : "'+card+'"'
         +'}';
 
@@ -1033,30 +1037,17 @@
       // Increase count for the food item if exists
 
       const jsonItemsCountArray = jsonItemsObject.items;
-
-      var today = new Date();
-      var dd = String(today.getDate()).padStart(2, '0');
-      var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-      var yyyy = today.getFullYear();
-      today = mm + '-' + dd + '-' + yyyy;
-      var time  = Date.now().toLocaleString()
       var countryCode = document.getElementById("sel_country_code").value;
 
       for (let i = 0; i < jsonItemsCountArray.length; i++) {
         let obj = jsonItemsCountArray[i];
 
-        now = Date.now();
-        _orderdate = today;
-        _ordertime = time;
         _orderlineid = i + 1;
         _orderquantity = obj.properties.count;
         _orderamount = Number(obj.properties.value * obj.properties.count).toFixed(2);
         _lat = customerlatlng.lat;
         _long = customerlatlng.lng;
         _itemid = obj.properties.name;
-        _orderid = 'O' + (i+1) + "_" + now;
-
-
 
         var orderobj = '{'
           +'"countryCode"  : "'+countryCode+'",'
@@ -1065,7 +1056,7 @@
           +'"quantity" : "'+_orderquantity+'",'
           +'"itemId" : "'+_itemid+'",'
           +'"amount" : "'+_orderamount+'",'
-          +'"orderId" : "'+_orderid+'",'
+          +'"orderId" : "'+orderid+'",'
           +'"latitude" : "'+_lat+'",'
           +'"longitude" : "'+_long+'"'
           +'}';
