@@ -27,6 +27,7 @@ import com.oracle.oda.ext.pojos.GeoJson;
 import com.oracle.oda.ext.pojos.JsonResponse;
 import com.oracle.oda.ext.pojos.MlObj;
 import com.oracle.oda.ext.pojos.OnlineOrder;
+import com.oracle.oda.ext.pojos.Product;
 import com.oracle.oda.ext.services.FoodsService;
 
 /***************************************************************************
@@ -64,7 +65,7 @@ public class RestApiController {
 	}
 
 	@RequestMapping(value = "/listshops", method = RequestMethod.GET)
-	public ResponseEntity<JsonResponse> listshops(@RequestParam("long") String longtitude,
+	public ResponseEntity<JsonResponse> listShops(@RequestParam("long") String longtitude,
 			@RequestParam("lat") String latitude) {
 		LOGGER.info("*** Got listshops request: " + longtitude + "|" + latitude);
 		List<GeoJson> shops = foodsService.listshops(Float.parseFloat(longtitude), Float.parseFloat(latitude));
@@ -90,5 +91,19 @@ public class RestApiController {
 		LOGGER.info("*** Got ml request: item = " + item);
 		List<MlObj> objs = foodsService.ml(item);
 		return JsonResponse.inst("OK", HttpStatus.OK, objs).toResponseEntity();
+	}
+
+	@RequestMapping(value = "/listprods", method = RequestMethod.GET)
+	public ResponseEntity<JsonResponse> listProds() {
+		LOGGER.info("*** Got listProds request.");
+		List<Product> prods = foodsService.listProducts();
+		return JsonResponse.inst("OK", HttpStatus.OK, prods).toResponseEntity();
+	}
+
+	@RequestMapping(value = "/insertprod", method = RequestMethod.PUT)
+	public ResponseEntity<JsonResponse> insertProduct(@RequestBody Product o) {
+		LOGGER.info("*** Got insertProduct request: " + o);
+		foodsService.insertProduct(o);
+		return JsonResponse.inst("OK", HttpStatus.OK, o).toResponseEntity();
 	}
 }

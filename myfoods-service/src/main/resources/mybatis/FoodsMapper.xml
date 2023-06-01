@@ -112,6 +112,29 @@
             PHONE as phone,
             LOCATION as location,
             CARD as card
-        from CUSTOMERORDER
+        from CUSTOMER_ORDER
 	</select>
+
+	<select id="listProducts" resultType="com.oracle.oda.ext.pojos.Product">
+        select 
+            NAME, 
+            PRICE, 
+            CURRENCY, 
+            IMAGE
+        from PRODUCTS
+	</select>
+
+	<insert id="insertProduct" parameterType="com.oracle.oda.ext.pojos.Product">
+		INSERT INTO PRODUCTS (
+            NAME, 
+            PRICE, 
+            CURRENCY,
+            IMAGE
+		) VALUES (
+			#{name, jdbcType=VARCHAR},
+			#{price, jdbcType=DECIMAL},
+			#{currency, jdbcType=VARCHAR},
+			#{image, jdbcType=VARCHAR}
+		)
+	</insert>
 </mapper>

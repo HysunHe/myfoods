@@ -7,9 +7,9 @@
  *
  ***************************************************************************/
 
- package com.oracle.oda.ext.dao;
+package com.oracle.oda.ext.dao;
 
- import java.util.List;
+import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -18,36 +18,40 @@ import com.oracle.oda.ext.pojos.CustomerOrder;
 import com.oracle.oda.ext.pojos.GeoJson;
 import com.oracle.oda.ext.pojos.MlObj;
 import com.oracle.oda.ext.pojos.OnlineOrder;
- 
- /***************************************************************************
-  * <PRE>
-  *  Project Name    : bot-gateway-springboot
-  * 
-  *  Package Name    : com.oracle.oda.ext.dao
-  * 
-  *  File Name       : FoodsMapper.java
-  * 
-  *  Creation Date   : 2023年5月30日
-  * 
-  *  Author          : hysun
-  * 
-  *  Purpose         : TODO
-  * 
-  * 
-  *  History         : TODO
-  * 
-  * </PRE>
-  ***************************************************************************/
+import com.oracle.oda.ext.pojos.Product;
 
+/***************************************************************************
+ * <PRE>
+ *  Project Name    : bot-gateway-springboot
+ * 
+ *  Package Name    : com.oracle.oda.ext.dao
+ * 
+ *  File Name       : FoodsMapper.java
+ * 
+ *  Creation Date   : 2023年5月30日
+ * 
+ *  Author          : hysun
+ * 
+ *  Purpose         : TODO
+ * 
+ * 
+ *  History         : TODO
+ * 
+ * </PRE>
+ ***************************************************************************/
 @Mapper
 public interface FoodsMapper {
-    List<GeoJson> getShops(@Param("longitude") float longitude, @Param("latitude") float latitude);
+  List<GeoJson> getShops(@Param("longitude") float longitude, @Param("latitude") float latitude);
 
-    void insertOnlineOrder(OnlineOrder o);
+  void insertOnlineOrder(OnlineOrder o);
 
-    void insertCustomerOrder(CustomerOrder o);
+  void insertCustomerOrder(CustomerOrder o);
 
-    List<MlObj> ml(@Param("item") String item);
+  List<MlObj> ml(@Param("item") String item);
 
-    List<CustomerOrder> listCustomerOrders();
-} 
+  List<CustomerOrder> listCustomerOrders();
+
+  List<Product> listProducts();
+
+  void insertProduct(Product o);
+}
