@@ -51,15 +51,16 @@ CREATE TABLE  "PRODUCTS"
    )  DEFAULT COLLATION "USING_NLS_COMP"
 /
 
+
 insert into PRODUCTS(NAME, PRICE, CURRENCY, IMAGE) values ('cherries', 17.5, '$', 'cherries.jpg');
 insert into PRODUCTS(NAME, PRICE, CURRENCY, IMAGE) values ('sandwich', 19.99, '$', 'sandwich.jpg');
 insert into PRODUCTS(NAME, PRICE, CURRENCY, IMAGE) values ('steak', 12.00, '$', 'steak.jpg');
-insert into PRODUCTS(NAME, PRICE, CURRENCY, IMAGE) values ('coke', 1.50, '$', 'coke.jpg');
-insert into PRODUCTS(NAME, PRICE, CURRENCY, IMAGE) values ('Pasta', 10.99, '$', 'Pasta.jpg');
 insert into PRODUCTS(NAME, PRICE, CURRENCY, IMAGE) values ('popsicle', 1.99, '$', 'popsicle.jpg');
+insert into PRODUCTS(NAME, PRICE, CURRENCY, IMAGE) values ('pasta', 10.99, '$', 'pasta.jpg');
 insert into PRODUCTS(NAME, PRICE, CURRENCY, IMAGE) values ('salmon', 14.00, '$', 'salmon.jpg');
 insert into PRODUCTS(NAME, PRICE, CURRENCY, IMAGE) values ('croissant', 10.00, '$', 'croissant.jpg');
-
+insert into PRODUCTS(NAME, PRICE, CURRENCY, IMAGE) values ('pepsi', 1.99, '$', 'pepsi.jpg');
+commit;
 
 insert into ONLINE_STORES(country_code, pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES ('SGP', 110, 247911, '29 Tanglin Road, Lobby Floor, St. Regis Hotel, Singapore 247911', 'yellowstore',1.3428,103.8854);
 insert into ONLINE_STORES(country_code, pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES ('SGP', 4, 178882, '122 Windsor Park Rd, Singapore 574182', 'bluestore', 1.3557, 103.8243);

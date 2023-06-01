@@ -449,62 +449,51 @@
   <div id="page1" class="w3-main w3-content " style="max-width:1200px;margin-top:100px">
 
     <div class="row">
-      <div class="column left">
-        <!-- First Photo Grid-->
-        <div class="w3-row-padding  w3-center" id="food">
-          <div class="w3-quarter">
-            <img src="./images/sandwich.jpg" alt="Sandwich" style="width:75%">
-            <h1>sandwich</h1>
-            <p class="price">$19.99</p>
-            <p><button class="mybutton cart" onclick="addToCart('Sandwich',19.99)">Add to Cart</button></p>
-          </div>
-          <div class="w3-quarter">
-            <img src="./images/steak.jpg" alt="Steak" style="width:75%">
-            <h1>steak</h1>
-            <p class="price">$12.00</p>
-            <p><button class="mybutton cart" onclick="addToCart('Steak',12.00)">Add to Cart</button></p>
-          </div>
-          <div class="w3-quarter">
-            <img src="./images/cherries.jpg" alt="Cherries" style="width:75%">
-            <h1>cherries</h1>
-            <p class="price">$17.50</p>
-            <p><button class="mybutton cart" onclick="addToCart('Cherries',17.50)">Add to Cart</button></p>
-          </div>
-          <div class="w3-quarter">
-            <img src="./images/pasta.jpg" alt="Pasta and Wine" style="width:75%">
-            <h1>Pasta</h1>
-            <p class="price">$10.99</p>
-            <p><button class="mybutton cart" onclick="addToCart('Pasta',10.99)">Add to Cart</button></p>
-          </div>
-        </div>
+      <div class="column left" id="food">
+       <script>
+          function loadProducts() {
+            URL = "http://129.154.214.178:7001/myfoods-service/api/listprods";
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', URL);
+            xhr.responseType = 'json';
+            xhr.send();
 
-        <!-- Second Photo Grid-->
-        <div class="w3-row-padding w3-padding-16 w3-center">
-          <div class="w3-quarter">
-            <img src="./images/popsicle.jpg" alt="Popsicle" style="width:75%">
-            <h1>popsicle</h1>
-            <p class="price">$1.99</p>
-            <p><button class="mybutton cart" onclick="addToCart('Popsicle',1.99)">Add to Cart</button></p>
-          </div>
-          <div class="w3-quarter">
-            <img src="./images/salmon.jpg" alt="Salmon" style="width:75%">
-            <h1>salmon</h1>
-            <p class="price">$14.00</p>
-            <p><button class="mybutton cart" onclick="addToCart('Salmon',14.00)">Add to Cart</button></p>
-          </div>
-          <div class="w3-quarter">
-            <img src="./images/sandwich.jpg" alt="Sandwich" style="width:75%">
-            <h1>sandwich</h1>
-            <p class="price">$8.50</p>
-            <p><button class="mybutton cart" onclick="addToCart('Sandwich',8.50)">Add to Cart</button></p>
-          </div>
-          <div class="w3-quarter">
-            <img src="./images/croissant.jpg" alt="Croissant" style="width:75%">
-            <h1>croissant</h1>
-            <p class="price">$10.00</p>
-            <p><button class="mybutton cart" onclick="addToCart('Croissant',10.00)">Add to Cart</button></p>
-          </div>
-        </div>
+            xhr.onload = () => {
+              var prod_html = '';
+
+              const jsonData = xhr.response;
+              console.log(jsonData.items.length);
+              if (jsonData.items.length == 0) {
+                console.log('No products found!')
+                return;
+              }
+
+              for(var i=0; i<jsonData.items.length; i++) {
+                var prod = jsonData.items[i]
+                if (i % 4 == 0) {
+                  if (i == 0) {
+                    prod_html += '<div class="w3-row-padding w3-center">\n'
+                  } else {
+                    prod_html += '<div class="w3-row-padding w3-padding-16 w3-center">\n'
+                  }
+                }
+                prod_html += '' + 
+                  '<div class="w3-quarter">\n' + 
+                    '<img src="./images/' + prod.image + '" style="max-width:161px; max-height:242px;">\n' + 
+                    '<h1>' + prod.name + '</h1>\n' + 
+                    '<p class="price">' + prod.currency + prod.price + '</p>\n' + 
+                    '<p><button class="mybutton cart" onclick="addToCart(\'' +  prod.name + '\',' + prod.price + ')">Add to Cart</button></p>\n' + 
+                  '</div>\n'
+              }
+              if (i % 4 == 0) {
+                prod_html += '</div>'
+              }
+              console.log('prod_html: \n' + prod_html);
+              document.getElementById("food").innerHTML = prod_html
+            }
+          }
+          loadProducts();
+       </script>
 
         <!-- Footer -->
         <footer class="w3-row-padding w3-padding-32">
