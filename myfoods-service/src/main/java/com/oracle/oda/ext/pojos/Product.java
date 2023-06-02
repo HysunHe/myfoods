@@ -33,8 +33,8 @@ import java.math.BigDecimal;
 public class Product {
     private String name;
     private BigDecimal price;
-    private String currency;
     private String image;
+    private String currency = "$";
 
     public String getName() {
         return name;

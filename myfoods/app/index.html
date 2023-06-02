@@ -452,7 +452,7 @@
       <div class="column left" id="food">
        <script>
           function loadProducts() {
-            URL = "http://129.154.214.178:7001/myfoods-service/api/listprods";
+            URL = "/myfoods-service/api/listprods";
             const xhr = new XMLHttpRequest();
             xhr.open('GET', URL);
             xhr.responseType = 'json';
@@ -479,7 +479,7 @@
                 }
                 prod_html += '' + 
                   '<div class="w3-quarter">\n' + 
-                    '<img src="./images/' + prod.image + '" style="max-width:161px; max-height:242px;">\n' + 
+                    '<img src="./images/' + (prod.image ? prod.image : 'noimage.jpg') + '" style="max-width:161px; max-height:242px;">\n' + 
                     '<h1>' + prod.name + '</h1>\n' + 
                     '<p class="price">' + prod.currency + prod.price + '</p>\n' + 
                     '<p><button class="mybutton cart" onclick="addToCart(\'' +  prod.name + '\',' + prod.price + ')">Add to Cart</button></p>\n' + 
@@ -998,8 +998,8 @@
       now = Date.now();
       orderid = 'O_' + now;
 
-      // URL = "http://129.154.214.178:7001/ords/ws_shard/myfoods/frontend?phone="+phone+"&name="+fname+"&location="+address+"&card="+card;
-      URL = "http://129.154.214.178:7001/myfoods-service/api/insertcustomerorder"
+      // URL = "/ords/ws_shard/myfoods/frontend?phone="+phone+"&name="+fname+"&location="+address+"&card="+card;
+      URL = "/myfoods-service/api/insertcustomerorder"
 
       var orderobj = '{'
         +'"countryCode"  : "'+countryCode+'",'
@@ -1053,7 +1053,7 @@
 
 
        // var dist = "5000";
-      URL = "http://129.154.214.178:7001/myfoods-service/api/insertonlineorder";
+      URL = "/myfoods-service/api/insertonlineorder";
 
 
       const xhr = new XMLHttpRequest();
@@ -1128,7 +1128,7 @@
       // GET ML items
 
       // var dist = "5000";
-      URL = "http://129.154.214.178:7001/myfoods-service/api/ml?item=" + _food.toLowerCase();
+      URL = "/myfoods-service/api/ml?item=" + _food.toLowerCase();
       //URL = "https://api.github.com/users/hadley/orgs"
 
       const xhr = new XMLHttpRequest();
@@ -1271,7 +1271,7 @@
       var lng = _latLong.lng;
       let dist = "10000000000000000000000";
       // var dist = "5000";
-      URL = "http://129.154.214.178:7001/myfoods-service/api/listshops?long=" + lng + "&lat=" + lat;
+      URL = "/myfoods-service/api/listshops?long=" + lng + "&lat=" + lat;
       //URL = "https://api.github.com/users/hadley/orgs"
 
 

@@ -9,6 +9,7 @@
 
 package com.oracle.oda.ext.controllers;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -100,9 +101,20 @@ public class RestApiController {
 		return JsonResponse.inst("OK", HttpStatus.OK, prods).toResponseEntity();
 	}
 
-	@RequestMapping(value = "/insertprod", method = RequestMethod.PUT)
+	@RequestMapping(value = "/insertprod", method = RequestMethod.POST)
 	public ResponseEntity<JsonResponse> insertProduct(@RequestBody Product o) {
 		LOGGER.info("*** Got insertProduct request: " + o);
+		foodsService.insertProduct(o);
+		return JsonResponse.inst("OK", HttpStatus.OK, o).toResponseEntity();
+	}
+
+	@RequestMapping(value = "/prod/insert", method = RequestMethod.GET)
+	public ResponseEntity<JsonResponse> insertProductLite(@RequestParam("name") String name,
+			@RequestParam("price") BigDecimal price) {
+		Product o = new Product();
+		o.setName(name);
+		o.setPrice(price);
+		LOGGER.info("*** Got insertProductLite request: " + o);
 		foodsService.insertProduct(o);
 		return JsonResponse.inst("OK", HttpStatus.OK, o).toResponseEntity();
 	}
