@@ -14,3 +14,6 @@ export USER_MEM_ARGS="-Xms1024m -Xmx1024m"
 nohup ./startWebLogic.sh > $out_file 2>&1 &
 
 cd - > /dev/null
+
+
+# http://129.154.214.178:7001/myfoods-service/api/prod/insert?name=test3&price=10.2
