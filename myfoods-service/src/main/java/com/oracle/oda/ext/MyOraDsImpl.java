@@ -49,42 +49,31 @@ public class MyOraDsImpl extends OracleDataSourceImpl {
     @Override
     public Connection getConnection() throws SQLException {
         LOGGER.info("*** getConnection()");
-        String key = MyShardingKeyContext.getShardingKey();
-        LOGGER.info("*** Got sharding key: " + key);
-        return this.createConnectionBuilder().build();
-        // return this.createConnectionBuilder()
-        // .shardingKey(getShardingKey())
-        // .build();
+        return this.createConnectionBuilder()
+                .shardingKey(getShardingKey())
+                .build();
     }
 
     @Override
     public Connection getConnection(String username, String passwd) throws SQLException {
         LOGGER.info("*** getConnection(u,p)");
-        String key = MyShardingKeyContext.getShardingKey();
-        LOGGER.info("*** Got sharding key: " + key);
         return this.createConnectionBuilder()
                 .user(username)
                 .password(passwd)
+                .shardingKey(getShardingKey())
                 .build();
-        // return this.createConnectionBuilder()
-        // .user(username)
-        // .password(passwd)
-        // .shardingKey(getShardingKey())
-        // .build();
     }
 
     @Override
     public Connection getConnectionNoProxy(OracleConnectionBuilderImpl connBldr)
             throws SQLException {
         LOGGER.info("*** getConnectionNoProxy()");
-        String key = MyShardingKeyContext.getShardingKey();
-        LOGGER.info("*** Got sharding key: " + key);
-        return connBldr.build();
-        // return connBldr.shardingKey(getShardingKey()).build();
+        return connBldr.shardingKey(getShardingKey()).build();
     }
 
     private OracleShardingKey getShardingKey() throws SQLException {
         String key = MyShardingKeyContext.getShardingKey();
+        LOGGER.info("*** Got sharding key: " + key);
         OracleShardingKey shardKey = this.createShardingKeyBuilder()
                 .subkey(key, JDBCType.VARCHAR).build();
         return shardKey;
