@@ -875,7 +875,7 @@
       }
     }
 
-    var map = genMap()
+    var map = genMap();
 
     function w3_open() {
       document.getElementById("mySidebar").style.display = "block";
@@ -886,17 +886,14 @@
     }
 
     function loadProducts(loc) {
-      console.log('loadProducts...')
       URL = "/myfoods-service/api/listprods?loc=" + loc;
       const xhr = new XMLHttpRequest();
       xhr.open('GET', URL);
       xhr.responseType = 'json';
       xhr.send();
-
       xhr.onload = () => {
         var prod_html = '';
         document.getElementById("food").innerHTML = '<div>Loading...</div>'
-
         const jsonData = xhr.response;
         console.log(jsonData.items.length);
         if (jsonData.items.length == 0) {
@@ -942,25 +939,33 @@
     }
 
     function genMap() {
-      return new maplibregl.Map({
+      map = new maplibregl.Map({
         container: 'map', // container id
         style:
           'https://api.maptiler.com/maps/streets/style.json?key=8hH50jvNhUwj8e90ICon',
         center: getCenterPos(), // starting position
         zoom: 10 // starting zoom
       });
+      map.on('click', function (e) {
+        reloadMap(e);
+      });
+      return map;
     }
     
     function selectRegion(){
       loc = document.getElementById('sel_location').value;
+      localStorage.setItem("sel_location", loc);
       loadProducts(loc); 
-      map = genMap();
-      reloadMap(map);
+      genMap();
+      reloadMap();
     }
 
     window.addEventListener('load', function(){
+      var loc = localStorage.getItem("sel_location") || 'SG';
+      document.getElementById('sel_location').value = loc;
+
       loadProducts(document.getElementById('sel_location').value);
-      reloadMap(map);
+      reloadMap();
     })
 
     function page1Function() {
@@ -1284,15 +1289,15 @@
 
     }
 
-    function reloadMap(map, e) {
+    function reloadMap(e) {
       console.log('reloadMap...')
 
-      if (map.getSource('datasource') != null) {
-        marker.setLngLat([0.0, 0.0]);
-        map.removeImage('custom-marker');
-        map.removeLayer('conferences');
-        map.removeSource('datasource');
-      }
+      // if (map.getSource('datasource') != null) {
+      //   marker.setLngLat([0.0, 0.0]);
+      //   map.removeImage('custom-marker');
+      //   map.removeLayer('conferences');
+      //   map.removeSource('datasource');
+      // }
 
       var center_pos = getCenterPos();
       var lng=center_pos[1];
@@ -1401,7 +1406,7 @@
     }
 
     map.on('click', function (e) {
-      reloadMap(map, e);
+      reloadMap(e);
     });
 
     function addressSelect() {
