@@ -947,6 +947,9 @@
         center: getCenterPos(), // starting position
         zoom: 3 // starting zoom
       });
+      marker = new maplibregl.Marker()
+        .setLngLat(getCenterPos())
+        .addTo(map);
       map.on('click', function (e) {
         reloadMap(e);
       });
