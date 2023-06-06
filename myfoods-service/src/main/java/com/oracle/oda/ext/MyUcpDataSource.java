@@ -7,18 +7,18 @@
  *
  ***************************************************************************/
 
-package com.oracle.oda.ext.dao;
+package com.oracle.oda.ext;
 
-import java.util.List;
+import javax.sql.DataSource;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
-import com.oracle.oda.ext.pojos.CustomerOrder;
-import com.oracle.oda.ext.pojos.GeoJson;
-import com.oracle.oda.ext.pojos.MlObj;
-import com.oracle.oda.ext.pojos.OnlineOrder;
-import com.oracle.oda.ext.pojos.Product;
+import oracle.ucp.jdbc.PoolDataSourceFactory;
 
 /***************************************************************************
  * <PRE>
@@ -39,18 +39,15 @@ import com.oracle.oda.ext.pojos.Product;
  * 
  * </PRE>
  ***************************************************************************/
-@Mapper
-public interface FoodsMapper {
-  List<GeoJson> getShops(@Param("longitude") float longitude, @Param("latitude") float latitude,
-      @Param("location") String location);
+@Configuration
+public class MyUcpDataSource {
+	private static final Logger LOGGER = LoggerFactory.getLogger(MyUcpDataSource.class);
 
-  void insertOnlineOrder(OnlineOrder o);
-
-  void insertCustomerOrder(CustomerOrder o);
-
-  List<MlObj> ml(@Param("item") String item);
-
-  List<Product> listProducts();
-
-  void insertProduct(Product o);
+	@Primary
+	@Bean("ncmsobs")
+	@ConfigurationProperties("spring.datasource.ncmsobs")
+	public DataSource ds_ncmsobs() {
+		LOGGER.info("*** Initialize datasource.");
+		return PoolDataSourceFactory.getPoolDataSource();
+	}
 }

@@ -7,18 +7,7 @@
  *
  ***************************************************************************/
 
-package com.oracle.oda.ext.dao;
-
-import java.util.List;
-
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
-import com.oracle.oda.ext.pojos.CustomerOrder;
-import com.oracle.oda.ext.pojos.GeoJson;
-import com.oracle.oda.ext.pojos.MlObj;
-import com.oracle.oda.ext.pojos.OnlineOrder;
-import com.oracle.oda.ext.pojos.Product;
+package com.oracle.oda.ext.pojos;
 
 /***************************************************************************
  * <PRE>
@@ -39,18 +28,29 @@ import com.oracle.oda.ext.pojos.Product;
  * 
  * </PRE>
  ***************************************************************************/
-@Mapper
-public interface FoodsMapper {
-  List<GeoJson> getShops(@Param("longitude") float longitude, @Param("latitude") float latitude,
-      @Param("location") String location);
+public class GeoJson {
+    private String mediatype;
+    private String geojson;
 
-  void insertOnlineOrder(OnlineOrder o);
+    public String getMediatype() {
+        return mediatype;
+    }
 
-  void insertCustomerOrder(CustomerOrder o);
+    public void setMediatype(String mediatype) {
+        this.mediatype = mediatype;
+    }
 
-  List<MlObj> ml(@Param("item") String item);
+    public String getGeojson() {
+        return geojson;
+    }
 
-  List<Product> listProducts();
+    public void setGeojson(String geojson) {
+        this.geojson = geojson;
+    }
 
-  void insertProduct(Product o);
+    @Override
+    public String toString() {
+        return "GeoJson [mediatype=" + mediatype + ", geojson=" + geojson + "]";
+    }
+
 }

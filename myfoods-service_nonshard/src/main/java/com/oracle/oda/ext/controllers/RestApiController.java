@@ -58,12 +58,18 @@ public class RestApiController {
 	@Autowired
 	private FoodsService foodsService;
 
+	@RequestMapping(value = "/lsco", method = RequestMethod.GET)
+	public ResponseEntity<List<CustomerOrder>> listCustomerOrders() {
+		LOGGER.info("*** Got listCustomerOrders request");
+		List<CustomerOrder> lsco = foodsService.listCustomerOrders();
+		return ResponseEntity.status(HttpStatus.OK).body(lsco);
+	}
+
 	@RequestMapping(value = "/listshops", method = RequestMethod.GET)
 	public ResponseEntity<JsonResponse> listShops(@RequestParam("long") String longtitude,
-			@RequestParam("lat") String latitude, @RequestParam("loc") String loc) {
+			@RequestParam("lat") String latitude) {
 		LOGGER.info("*** Got listshops request: " + longtitude + "|" + latitude);
-		List<GeoJson> shops = foodsService.listshops(Float.parseFloat(longtitude),
-				Float.parseFloat(latitude), loc);
+		List<GeoJson> shops = foodsService.listshops(Float.parseFloat(longtitude), Float.parseFloat(latitude));
 		return JsonResponse.inst("OK", HttpStatus.OK, shops).toResponseEntity();
 	}
 

@@ -438,9 +438,16 @@
   <div class="w3-top">
     <div class="w3-white w3-xlarge" style="max-width:1200px;margin:auto">
 
-      <div class="w3-center w3-padding-16">
-        <img src="./images/logo.png" style="width:5%;height:5%">
-        MyFoods
+      <div class="w3-left w3-padding-16">
+        <img src="./images/logo.png" style="width:5%;height:5%">MyFoods</img>
+        <div style="float:right;color:#4CAF50;font-size:20px;font-weight: 700;">
+          <label for="sel_location">Your current location:</label>
+          <select style="width:135px;" id="sel_location" onchange="selectRegion()">
+            <option value="SG">Singapore</option>
+            <option value="IN">India</option>
+            <option value="AU">Australia</option>
+          </select>
+        </div>
       </div>
     </div>
   </div>
@@ -450,50 +457,6 @@
 
     <div class="row">
       <div class="column left" id="food">
-       <script>
-          function loadProducts() {
-            URL = "/myfoods-service/api/listprods";
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', URL);
-            xhr.responseType = 'json';
-            xhr.send();
-
-            xhr.onload = () => {
-              var prod_html = '';
-
-              const jsonData = xhr.response;
-              console.log(jsonData.items.length);
-              if (jsonData.items.length == 0) {
-                console.log('No products found!')
-                return;
-              }
-
-              for(var i=0; i<jsonData.items.length; i++) {
-                var prod = jsonData.items[i]
-                if (i % 4 == 0) {
-                  if (i == 0) {
-                    prod_html += '<div class="w3-row-padding w3-center">\n'
-                  } else {
-                    prod_html += '<div class="w3-row-padding w3-padding-16 w3-center">\n'
-                  }
-                }
-                prod_html += '' + 
-                  '<div class="w3-quarter">\n' + 
-                    '<img src="./images/' + (prod.image ? prod.image : 'noimage.jpg') + '" style="max-width:161px; max-height:242px;">\n' + 
-                    '<h1>' + prod.name + '</h1>\n' + 
-                    '<p class="price">' + prod.currency + prod.price + '</p>\n' + 
-                    '<p><button class="mybutton cart" onclick="addToCart(\'' +  prod.name + '\',' + prod.price + ')">Add to Cart</button></p>\n' + 
-                  '</div>\n'
-              }
-              if (i % 4 == 0) {
-                prod_html += '</div>'
-              }
-              document.getElementById("food").innerHTML = prod_html
-            }
-          }
-          loadProducts();
-       </script>
-
         <!-- Footer -->
         <footer class="w3-row-padding w3-padding-32">
           <div class="w3-third">
@@ -880,8 +843,8 @@
 
 
     function delay(time) {
-  return new Promise(resolve => setTimeout(resolve, time));
-}
+      return new Promise(resolve => setTimeout(resolve, time));
+    }
 
     // When the user clicks the button, open the modal 
     btn.onclick = function () {
@@ -911,15 +874,8 @@
         ordermodal.style.display = "none";
       }
     }
-    // Script to open and close sidebar
-    var map = new maplibregl.Map({
-      container: 'map', // container id
-      style:
-        'https://api.maptiler.com/maps/streets/style.json?key=8hH50jvNhUwj8e90ICon',
-      center: [103.868409, 1.347768], // starting position
-      zoom: 2 // starting zoom
-    });
 
+    var map = genMap()
 
     function w3_open() {
       document.getElementById("mySidebar").style.display = "block";
@@ -928,6 +884,84 @@
     function w3_close() {
       document.getElementById("mySidebar").style.display = "none";
     }
+
+    function loadProducts(loc) {
+      console.log('loadProducts...')
+      URL = "/myfoods-service/api/listprods?countryCode=" + loc;
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', URL);
+      xhr.responseType = 'json';
+      xhr.send();
+
+      xhr.onload = () => {
+        var prod_html = '';
+        document.getElementById("food").innerHTML = '<div>Loading...</div>'
+
+        const jsonData = xhr.response;
+        console.log(jsonData.items.length);
+        if (jsonData.items.length == 0) {
+          console.log('No products found!')
+          return;
+        }
+
+        for(var i=0; i<jsonData.items.length; i++) {
+          var prod = jsonData.items[i]
+          if (i % 4 == 0) {
+            if (i == 0) {
+              prod_html += '<div class="w3-row-padding w3-center">\n'
+            } else {
+              prod_html += '<div class="w3-row-padding w3-padding-16 w3-center">\n'
+            }
+          }
+          prod_html += '' + 
+            '<div class="w3-quarter">\n' + 
+              '<img src="./images/' + (prod.image ? prod.image : 'noimage.jpg') + '" style="max-width:161px; max-height:242px;">\n' + 
+              '<h1>' + prod.name + '</h1>\n' + 
+              '<p class="price">' + prod.currency + prod.price + '</p>\n' + 
+              '<p><button class="mybutton cart" onclick="addToCart(\'' +  prod.name + '\',' + prod.price + ')">Add to Cart</button></p>\n' + 
+            '</div>\n'
+        }
+        if (i % 4 == 0) {
+          prod_html += '</div>'
+        }
+        document.getElementById("food").innerHTML = prod_html
+      }
+    }
+
+    function getCenterPos(){
+      loc = document.getElementById('sel_location').value;
+      var center_pos = [103.868409, 1.347768];
+      if(loc === 'SG') {
+        center_pos = [103.8198, 1.3521];
+      } else if(loc === 'IN') {
+        center_pos = [72.9629, 20.5937];
+      } else if(loc === 'AU') {
+        center_pos = [151.2043, -33.1714];
+      }
+      return center_pos;
+    }
+
+    function genMap() {
+      return new maplibregl.Map({
+        container: 'map', // container id
+        style:
+          'https://api.maptiler.com/maps/streets/style.json?key=8hH50jvNhUwj8e90ICon',
+        center: getCenterPos(), // starting position
+        zoom: 10 // starting zoom
+      });
+    }
+    
+    function selectRegion(){
+      loc = document.getElementById('sel_location').value;
+      loadProducts(loc); 
+      map = genMap();
+      reloadMap(map);
+    }
+
+    window.addEventListener('load', function(){
+      loadProducts(document.getElementById('sel_location').value);
+      reloadMap(map);
+    })
 
     function page1Function() {
       const page1 = document.getElementById('page1');
@@ -1249,7 +1283,8 @@
 
     }
 
-    map.on('click', function (e) {
+    function reloadMap(map, e) {
+      console.log('reloadMap...')
 
       if (map.getSource('datasource') != null) {
         marker.setLngLat([0.0, 0.0]);
@@ -1258,24 +1293,26 @@
         map.removeSource('datasource');
       }
 
-      /// For rest call
+      var center_pos = getCenterPos();
+      var lng=center_pos[1];
+      var lat=center_pos[0];
+      customerlatlng = {
+        "lng": lng,
+        "lat": lat
+      }
 
-      // var ItemJSON;
+      if(e) {
+        var _latLong = e.lngLat.wrap();
+        customerlatlng = e.lngLat;
+        var lat = _latLong.lat;
+        var lng = _latLong.lng;
+      }
 
-      // ItemJSON = '[  {    "Id": 1,    "ProductID": "1",    "Quantity": 1,  },  {    "Id": 1,    "ProductID": "2",    "Quantity": 2,  }]';
-      // var lat = "23.890178904023145";
-      // var lng = "79.05081176757744";
-      var _latLong = e.lngLat.wrap();
-      customerlatlng = e.lngLat;
-      var lat = _latLong.lat;
-      var lng = _latLong.lng;
       let dist = "10000000000000000000000";
+      var loc = document.getElementById('sel_location').value
       // var dist = "5000";
-      URL = "/myfoods-service/api/listshops?long=" + lng + "&lat=" + lat;
+      URL = "/myfoods-service/api/listshops?long=" + lng + "&lat=" + lat + "&loc=" + loc;
       //URL = "https://api.github.com/users/hadley/orgs"
-
-
-
 
       const xhr = new XMLHttpRequest();
 
@@ -1299,9 +1336,12 @@
         //const geoJSONData = "{ \"type\": \"FeatureCollection\", \"features\": [{ \"type\": \"Feature\", \"properties\": { \"ogr_fid\": \"23 main, colnbrook UB7BD\", \"rd_cls\": \"Kerbana\", \"distance_m\": \"168.886494476744\", \"marker-color\": \"\" }, \"geometry\": { \"type\": \"Point\", \"coordinates\": [78.84889, 23.91668, 0] } }, { \"type\": \"Feature\", \"properties\": { \"ogr_fid\": \"11 cross road, uxbridge highway UB8ID\", \"rd_cls\": \"Kerbana\", \"distance_m\": \"306.397703449732\", \"marker-color\": \"\" }, \"geometry\": { \"type\": \"Point\", \"coordinates\": [78.84949, 23.91551, 0] } }, { \"type\": \"Feature\", \"properties\": { \"ogr_fid\": \"4 Greater Avenue, Springsfield, Uxbridge, UB843D\", \"rd_cls\": \"\", \"distance_m\": \"312\", \"marker-color\": \"#931010\" }, \"geometry\": { \"type\": \"Point\", \"coordinates\": [78.84879938607014, 23.918202560781793, 0] } }] }";
         //var strgeojson = JSON.stringify({ "type": "FeatureCollection", "features": [{ "type": "Feature", "properties": { "ogr_fid": "23 main, colnbrook UB7BD", "rd_cls": "Kerbana", "distance_m": "168.886494476744", "marker-color": "" }, "geometry": { "type": "Point", "coordinates": [78.84889, 23.91668, 0] } }, { "type": "Feature", "properties": { "ogr_fid": "11 cross road, uxbridge highway UB8ID", "rd_cls": "Kerbana", "distance_m": "306.397703449732", "marker-color": "" }, "geometry": { "type": "Point", "coordinates": [78.84949, 23.91551, 0] } }, { "type": "Feature", "properties": { "ogr_fid": "4 Greater Avenue, Springsfield, Uxbridge, UB843D", "rd_cls": "", "distance_m": "312", "marker-color": "#931010" }, "geometry": { "type": "Point", "coordinates": [78.84879938607014, 23.918202560781793, 0] } }] });
 
-
+        var ll = center_pos;
+        if (e) {
+          ll = e.lngLat;
+        }
         marker = new maplibregl.Marker()
-          .setLngLat(e.lngLat)
+          .setLngLat(ll)
           .addTo(map);
 
 
@@ -1357,7 +1397,10 @@
         }
         document.getElementById("right-spatial").innerHTML = table + "";
       }
+    }
 
+    map.on('click', function (e) {
+      reloadMap(map, e);
     });
 
     function addressSelect() {

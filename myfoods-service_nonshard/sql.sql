@@ -62,12 +62,12 @@ insert into PRODUCTS(NAME, PRICE, CURRENCY, IMAGE) values ('croissant', 10.00, '
 insert into PRODUCTS(NAME, PRICE, CURRENCY, IMAGE) values ('pepsi', 1.99, '$', 'pepsi.jpg');
 commit;
 
-insert into ONLINE_STORES(country_code, pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES ('SG', 110, 247911, '29 Tanglin Road, Lobby Floor, St. Regis Hotel, Singapore 247911', 'yellowstore',1.3428,103.8854);
-insert into ONLINE_STORES(country_code, pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES ('SG', 4, 178882, '122 Windsor Park Rd, Singapore 574182', 'bluestore', 1.3557, 103.8243);
-insert into ONLINE_STORES(country_code, pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES ('AU', 97, 228208, '204 Sussex St, Sydney NSW 2000, ANZtralia', 'freshstore', -33.8714, 151.2043);
-insert into ONLINE_STORES(country_code, pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES ('AU', 48, 88461, '163 Crown St, Darlinghurst NSW 2010, ANZtralia', 'seastore', -33.8768, 151.2155);
-insert into ONLINE_STORES(country_code, pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES ('IN', 53, 18972, 'MTNL Rd, Saki Naka, Mumbai, Maharashtra 400072, India', 'organicstore', 19.1005, 72.8812);
-insert into ONLINE_STORES(country_code, pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES ('IN', 50, 18956, '3RGW+7XH Mumbai, Maharashtra, India', 'onlinestore', 19.0757, 72.8475);
+insert into ONLINE_STORES(country_code, pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES ('SGP', 110, 247911, '29 Tanglin Road, Lobby Floor, St. Regis Hotel, Singapore 247911', 'yellowstore',1.3428,103.8854);
+insert into ONLINE_STORES(country_code, pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES ('SGP', 4, 178882, '122 Windsor Park Rd, Singapore 574182', 'bluestore', 1.3557, 103.8243);
+insert into ONLINE_STORES(country_code, pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES ('ANZ', 97, 228208, '204 Sussex St, Sydney NSW 2000, ANZtralia', 'freshstore', -33.8714, 151.2043);
+insert into ONLINE_STORES(country_code, pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES ('ANZ', 48, 88461, '163 Crown St, Darlinghurst NSW 2010, ANZtralia', 'seastore', -33.8768, 151.2155);
+insert into ONLINE_STORES(country_code, pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES ('IND', 53, 18972, 'MTNL Rd, Saki Naka, Mumbai, Maharashtra 400072, India', 'organicstore', 19.1005, 72.8812);
+insert into ONLINE_STORES(country_code, pk_col, pin_code, store_address, store_name, LATITUDE, LONGITUDE) VALUES ('IND', 50, 18956, '3RGW+7XH Mumbai, Maharashtra, India', 'onlinestore', 19.0757, 72.8475);
 commit;
 
 insert into user_sdo_geom_metadata (table_name, column_name, diminfo, srid)

@@ -7,18 +7,7 @@
  *
  ***************************************************************************/
 
-package com.oracle.oda.ext.dao;
-
-import java.util.List;
-
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
-import com.oracle.oda.ext.pojos.CustomerOrder;
-import com.oracle.oda.ext.pojos.GeoJson;
-import com.oracle.oda.ext.pojos.MlObj;
-import com.oracle.oda.ext.pojos.OnlineOrder;
-import com.oracle.oda.ext.pojos.Product;
+package com.oracle.oda.ext;
 
 /***************************************************************************
  * <PRE>
@@ -39,18 +28,18 @@ import com.oracle.oda.ext.pojos.Product;
  * 
  * </PRE>
  ***************************************************************************/
-@Mapper
-public interface FoodsMapper {
-  List<GeoJson> getShops(@Param("longitude") float longitude, @Param("latitude") float latitude,
-      @Param("location") String location);
+public class MyShardingKeyContext {
+    private static ThreadLocal<String> context = new ThreadLocal<String>();
 
-  void insertOnlineOrder(OnlineOrder o);
+    public static ThreadLocal<String> getContext() {
+        return context;
+    }
 
-  void insertCustomerOrder(CustomerOrder o);
+    public static void setShardingKey(String countryCode) {
+        context.set(countryCode);
+    }
 
-  List<MlObj> ml(@Param("item") String item);
-
-  List<Product> listProducts();
-
-  void insertProduct(Product o);
+    public static String getShardingKey() {
+        return context.get();
+    }
 }

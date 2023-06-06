@@ -41,14 +41,15 @@ import com.oracle.oda.ext.pojos.Product;
  ***************************************************************************/
 @Mapper
 public interface FoodsMapper {
-  List<GeoJson> getShops(@Param("longitude") float longitude, @Param("latitude") float latitude,
-      @Param("location") String location);
+  List<GeoJson> getShops(@Param("longitude") float longitude, @Param("latitude") float latitude);
 
   void insertOnlineOrder(OnlineOrder o);
 
   void insertCustomerOrder(CustomerOrder o);
 
   List<MlObj> ml(@Param("item") String item);
+
+  List<CustomerOrder> listCustomerOrders();
 
   List<Product> listProducts();
 

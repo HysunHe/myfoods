@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.oracle.oda.ext.MyShardingKeyContext;
 import com.oracle.oda.ext.dao.FoodsMapper;
 import com.oracle.oda.ext.exceptions.ApplicationException;
 import com.oracle.oda.ext.pojos.CustomerOrder;
@@ -52,10 +51,9 @@ public class FoodsService {
     @Autowired
     private FoodsMapper mapper;
 
-    public List<GeoJson> listshops(float longitude, float latitude, String loc) {
-        MyShardingKeyContext.setShardingKey(loc);
+    public List<GeoJson> listshops(float longitude, float latitude) {
         try {
-            return mapper.getShops(longitude, latitude, loc);
+            return mapper.getShops(longitude, latitude);
         } catch (Exception e) {
             LOGGER.error("!!! list failed: ", e);
             throw new ApplicationException(e);
@@ -64,7 +62,6 @@ public class FoodsService {
 
     public void insertOnlineOrder(OnlineOrder o) throws ApplicationException {
         LOGGER.info("*** Inserting OnlineOrder: " + o);
-        MyShardingKeyContext.setShardingKey(o.getCountryCode());
         if (o.getDt() == null) {
             o.setDt(DateUtil.nowTs());
         }
@@ -78,7 +75,6 @@ public class FoodsService {
 
     public void insertCustomerOrder(CustomerOrder o) throws ApplicationException {
         LOGGER.info("*** Inserting CustomerOrder: " + o);
-        MyShardingKeyContext.setShardingKey(o.getCountryCode());
         try {
             mapper.insertCustomerOrder(o);
         } catch (Exception e) {
@@ -92,6 +88,15 @@ public class FoodsService {
             return mapper.ml(item);
         } catch (Exception e) {
             LOGGER.error("!!! ml failed: ", e);
+            throw new ApplicationException(e);
+        }
+    }
+
+    public List<CustomerOrder> listCustomerOrders() {
+        try {
+            return mapper.listCustomerOrders();
+        } catch (Exception e) {
+            LOGGER.error("!!! listCustomerOrders failed: ", e);
             throw new ApplicationException(e);
         }
     }
