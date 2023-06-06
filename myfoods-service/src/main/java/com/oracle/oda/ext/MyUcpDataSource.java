@@ -9,6 +9,8 @@
 
 package com.oracle.oda.ext;
 
+import java.sql.SQLException;
+
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
@@ -18,7 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
-import oracle.ucp.jdbc.PoolDataSourceFactory;
+import oracle.jdbc.replay.OracleDataSourceFactory;
 
 /***************************************************************************
  * <PRE>
@@ -46,8 +48,8 @@ public class MyUcpDataSource {
 	@Primary
 	@Bean("ncmsobs")
 	@ConfigurationProperties("spring.datasource.ncmsobs")
-	public DataSource ds_ncmsobs() {
+	public DataSource ds_ncmsobs() throws SQLException {
 		LOGGER.info("*** Initialize datasource.");
-		return PoolDataSourceFactory.getPoolDataSource();
+		return OracleDataSourceFactory.getOracleDataSource();
 	}
 }

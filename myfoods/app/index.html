@@ -887,7 +887,7 @@
 
     function loadProducts(loc) {
       console.log('loadProducts...')
-      URL = "/myfoods-service/api/listprods?countryCode=" + loc;
+      URL = "/myfoods-service/api/listprods?loc=" + loc;
       const xhr = new XMLHttpRequest();
       xhr.open('GET', URL);
       xhr.responseType = 'json';
@@ -1162,7 +1162,8 @@
       // GET ML items
 
       // var dist = "5000";
-      URL = "/myfoods-service/api/ml?item=" + _food.toLowerCase();
+      var loc = document.getElementById('sel_location').value
+      URL = "/myfoods-service/api/ml?item=" + _food.toLowerCase() + "&loc=" + loc;
       //URL = "https://api.github.com/users/hadley/orgs"
 
       const xhr = new XMLHttpRequest();

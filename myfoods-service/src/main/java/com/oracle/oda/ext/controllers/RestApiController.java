@@ -82,16 +82,17 @@ public class RestApiController {
 	}
 
 	@RequestMapping(value = "/ml", method = RequestMethod.GET)
-	public ResponseEntity<JsonResponse> ml(@RequestParam("item") String item) {
+	public ResponseEntity<JsonResponse> ml(@RequestParam("item") String item,
+			@RequestParam("loc") String loc) {
 		LOGGER.info("*** Got ml request: item = " + item);
-		List<MlObj> objs = foodsService.ml(item);
+		List<MlObj> objs = foodsService.ml(item, loc);
 		return JsonResponse.inst("OK", HttpStatus.OK, objs).toResponseEntity();
 	}
 
 	@RequestMapping(value = "/listprods", method = RequestMethod.GET)
-	public ResponseEntity<JsonResponse> listProds() {
+	public ResponseEntity<JsonResponse> listProds(@RequestParam("loc") String loc) {
 		LOGGER.info("*** Got listProds request.");
-		List<Product> prods = foodsService.listProducts();
+		List<Product> prods = foodsService.listProducts(loc);
 		return JsonResponse.inst("OK", HttpStatus.OK, prods).toResponseEntity();
 	}
 

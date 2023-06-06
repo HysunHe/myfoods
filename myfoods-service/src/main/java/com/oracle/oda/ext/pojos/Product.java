@@ -35,6 +35,7 @@ public class Product {
     private BigDecimal price;
     private String image;
     private String currency = "$";
+    private String countryCode = "SG";
 
     public String getName() {
         return name;
@@ -66,6 +67,14 @@ public class Product {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
     }
 
     @Override

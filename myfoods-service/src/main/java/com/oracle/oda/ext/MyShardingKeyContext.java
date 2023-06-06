@@ -9,6 +9,9 @@
 
 package com.oracle.oda.ext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /***************************************************************************
  * <PRE>
  *  Project Name    : bot-gateway-springboot
@@ -29,6 +32,8 @@ package com.oracle.oda.ext;
  * </PRE>
  ***************************************************************************/
 public class MyShardingKeyContext {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MyShardingKeyContext.class);
+
     private static ThreadLocal<String> context = new ThreadLocal<String>();
 
     public static ThreadLocal<String> getContext() {
@@ -36,10 +41,13 @@ public class MyShardingKeyContext {
     }
 
     public static void setShardingKey(String countryCode) {
+        LOGGER.info("*** Set sharding key: " + countryCode);
         context.set(countryCode);
     }
 
     public static String getShardingKey() {
-        return context.get();
+        String key = context.get();
+        LOGGER.info("*** Got sharding key: " + key);
+        return key;
     }
 }

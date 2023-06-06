@@ -87,7 +87,8 @@ public class FoodsService {
         }
     }
 
-    public List<MlObj> ml(String item) {
+    public List<MlObj> ml(String item, String countryCode) {
+        MyShardingKeyContext.setShardingKey(countryCode);
         try {
             return mapper.ml(item);
         } catch (Exception e) {
@@ -96,7 +97,8 @@ public class FoodsService {
         }
     }
 
-    public List<Product> listProducts() {
+    public List<Product> listProducts(String countryCode) {
+        MyShardingKeyContext.setShardingKey(countryCode);
         try {
             return mapper.listProducts();
         } catch (Exception e) {
@@ -107,6 +109,7 @@ public class FoodsService {
 
     public void insertProduct(Product o) throws ApplicationException {
         LOGGER.info("*** Inserting Product: " + o);
+        MyShardingKeyContext.setShardingKey(o.getCountryCode());
         try {
             mapper.insertProduct(o);
         } catch (Exception e) {
