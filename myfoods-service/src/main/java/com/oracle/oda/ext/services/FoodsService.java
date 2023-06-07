@@ -9,6 +9,7 @@
 
 package com.oracle.oda.ext.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -90,7 +91,7 @@ public class FoodsService {
     public List<MlObj> ml(String item, String countryCode) {
         MyShardingKeyContext.setShardingKey(countryCode);
         try {
-            return mapper.ml(item);
+            return new ArrayList<MlObj>();
         } catch (Exception e) {
             LOGGER.error("!!! ml failed: ", e);
             throw new ApplicationException(e);
