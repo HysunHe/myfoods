@@ -1,0 +1,131 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oracle.oda.ext.dao.FoodsMapper">
+	<select id="getShops" resultType="com.oracle.oda.ext.pojos.GeoJson">
+        with x as (SELECT
+            t1.pk_col,
+            t1.country_code,
+            t1.pin_code,
+            t1.store_address,
+            t1.store_name,
+            sdo_nn_distance(5) distance_m,
+            get_geometry(t1.longitude, t1.latitude) geometry
+        FROM
+            ouser.online_stores t1
+        WHERE
+                sdo_nn(get_geometry(t1.longitude, t1.latitude),
+                    mdsys.sdo_geometry(2001,
+                                        4326,
+                                        sdo_point_type(#{longitude}, #{latitude}, NULL),
+                                        NULL,
+                                        NULL),
+                    'sdo_batch_size=10 unit=KM',
+                    5) = 'TRUE'
+            AND COUNTRY_CODE = #{location}
+            AND ROWNUM <![CDATA[<=]]> 10
+            )
+        SELECT 'application/json' as mediatype,
+            '{"type": "FeatureCollection", "features":'
+            || JSON_ARRAYAGG(
+                '{"type": "Feature", "properties": {'
+                || '"pk_col":"'|| pk_col
+                ||'","country_code":"'|| country_code
+                ||'","pin_code":"'|| pin_code
+                ||'","store_address":"'|| store_address
+                ||'","store_name":"'|| store_name
+                ||'","distance_m":"'|| distance_m
+                ||'"}, "geometry":'|| SDO_UTIL.TO_GEOJSON(Geometry)
+                ||'}'
+            FORMAT JSON RETURNING CLOB)
+            ||'}'
+            AS geojson
+        FROM X
+	</select>
+
+	<insert id="insertOnlineOrder" parameterType="com.oracle.oda.ext.pojos.OnlineOrder">
+		INSERT INTO ONLINE_ORDER_ITEMS
+		(
+            COUNTRY_CODE,
+			ORDER_ID,
+			ORDER_DATETIME,
+			LINE_ID,
+            QUANTITY,
+            ITEM_ID,
+            AMOUNT,
+            LATITUDE,
+            LONGITUDE
+		) VALUES (
+            #{countryCode, jdbcType=VARCHAR},
+			#{orderId, jdbcType=VARCHAR},
+			#{dt, jdbcType=TIMESTAMP},
+			#{lineId, jdbcType=VARCHAR},
+            #{quantity, jdbcType=INTEGER},
+            #{itemId, jdbcType=VARCHAR},
+            #{amount, jdbcType=DECIMAL},
+            #{latitude, jdbcType=DECIMAL},
+            #{longitude, jdbcType=DECIMAL}		
+        )
+	</insert>
+	
+	<insert id="insertCustomerOrder" parameterType="com.oracle.oda.ext.pojos.CustomerOrder">
+		INSERT INTO CUSTOMER_ORDER
+		(
+            COUNTRY_CODE,
+			NAME,
+			PHONE,
+			LOCATION,
+			CARD,
+            ORDER_ID
+		) VALUES (
+			#{countryCode, jdbcType=VARCHAR},
+			#{name, jdbcType=VARCHAR},
+			#{phone, jdbcType=VARCHAR},
+			#{location, jdbcType=VARCHAR},
+			#{card, jdbcType=VARCHAR},
+            #{orderId, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="ml" resultType="com.oracle.oda.ext.pojos.MlObj">
+        SELECT 
+            ROWNUM rank,
+            CONSEQUENT_NAME recommendation,
+            NUMBER_OF_ITEMS num,
+            ROUND(RULE_SUPPORT, 3) support,
+            ROUND(RULE_CONFIDENCE, 3) confidence,
+            ROUND(RULE_LIFT, 3) lift,
+            ROUND(RULE_REVCONFIDENCE, 3) reverseConfidence
+        FROM (
+            SELECT * FROM DM$VRGB_DISH_MB
+            WHERE NUMBER_OF_ITEMS = 2
+                AND EXTRACT(antecedent, '//item[item_name="'||to_char(#{item})||'"]') IS NOT NULL
+            ORDER BY NUMBER_OF_ITEMS
+        )
+        WHERE ROWNUM <![CDATA[<=]]> 2
+	</select>
+
+	<select id="listProducts" resultType="com.oracle.oda.ext.pojos.Product">
+        select 
+            NAME, 
+            PRICE, 
+            CURRENCY, 
+            IMAGE
+        from PRODUCTS
+	</select>
+
+	<insert id="insertProduct" parameterType="com.oracle.oda.ext.pojos.Product">
+		INSERT INTO PRODUCTS (
+            NAME, 
+            PRICE, 
+            CURRENCY,
+            IMAGE
+		) VALUES (
+			#{name, jdbcType=VARCHAR},
+			#{price, jdbcType=DECIMAL},
+			#{currency, jdbcType=VARCHAR},
+			#{image, jdbcType=VARCHAR}
+		)
+	</insert>
+</mapper>
