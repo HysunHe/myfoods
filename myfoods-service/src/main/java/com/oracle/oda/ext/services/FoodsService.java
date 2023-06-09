@@ -29,13 +29,13 @@ import com.oracle.oda.ext.utils.DateUtil;
 
 /***************************************************************************
  * <PRE>
- *  Project Name    : bot-gateway-springboot
+ *  Project Name    : MyFood-Service
  * 
  *  Package Name    : com.oracle.oda.ext.services
  * 
- *  File Name       : TopicService.java
+ *  File Name       : FoodsService_AU.java
  * 
- *  Creation Date   : 2019年2月22日
+ *  Creation Date   : 2023年6月8日
  * 
  *  Author          : hysun
  * 
@@ -48,10 +48,14 @@ import com.oracle.oda.ext.utils.DateUtil;
  ***************************************************************************/
 @Service
 public class FoodsService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(FoodsService.class);
+    protected final Logger LOGGER = getLogger();
 
     @Autowired
-    private FoodsMapper mapper;
+    protected FoodsMapper mapper;
+
+    protected Logger getLogger() {
+        return LoggerFactory.getLogger(FoodsService.class);
+    }
 
     public List<GeoJson> listshops(float longitude, float latitude, String loc) {
         MyShardingKeyContext.setShardingKey(loc);

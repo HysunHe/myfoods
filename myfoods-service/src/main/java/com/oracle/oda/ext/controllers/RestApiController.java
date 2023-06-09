@@ -15,6 +15,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +31,7 @@ import com.oracle.oda.ext.pojos.MlObj;
 import com.oracle.oda.ext.pojos.OnlineOrder;
 import com.oracle.oda.ext.pojos.Product;
 import com.oracle.oda.ext.services.FoodsService;
+import com.oracle.oda.ext.utils.StringUtil;
 
 /***************************************************************************
  * <PRE>
@@ -56,13 +58,18 @@ public class RestApiController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RestApiController.class);
 
 	@Autowired
-	private FoodsService foodsService;
+	private ApplicationContext applicationContext;
+
+	private FoodsService getService(String key) {
+		assert !StringUtil.isBlank(key);
+		return (FoodsService) applicationContext.getBean("foodsService_" + key);
+	}
 
 	@RequestMapping(value = "/listshops", method = RequestMethod.GET)
 	public ResponseEntity<JsonResponse> listShops(@RequestParam("long") String longtitude,
 			@RequestParam("lat") String latitude, @RequestParam("loc") String loc) {
 		LOGGER.info("*** Got listshops request: " + longtitude + "|" + latitude);
-		List<GeoJson> shops = foodsService.listshops(Float.parseFloat(longtitude),
+		List<GeoJson> shops = getService(loc).listshops(Float.parseFloat(longtitude),
 				Float.parseFloat(latitude), loc);
 		return JsonResponse.inst("OK", HttpStatus.OK, shops).toResponseEntity();
 	}
@@ -70,14 +77,14 @@ public class RestApiController {
 	@RequestMapping(value = "/insertonlineorder", method = RequestMethod.POST)
 	public ResponseEntity<JsonResponse> insertOnlineOrder(@RequestBody OnlineOrder o) {
 		LOGGER.info("*** Got insertOnlineOrder request: " + o);
-		foodsService.insertOnlineOrder(o);
+		getService(o.getCountryCode()).insertOnlineOrder(o);
 		return JsonResponse.inst("OK", HttpStatus.OK, o).toResponseEntity();
 	}
 
 	@RequestMapping(value = "/insertcustomerorder", method = RequestMethod.PUT)
 	public ResponseEntity<JsonResponse> insertCustomerOrder(@RequestBody CustomerOrder o) {
 		LOGGER.info("*** Got insertCustomerOrder request: " + o);
-		foodsService.insertCustomerOrder(o);
+		getService(o.getCountryCode()).insertCustomerOrder(o);
 		return JsonResponse.inst("OK", HttpStatus.OK, o).toResponseEntity();
 	}
 
@@ -85,21 +92,21 @@ public class RestApiController {
 	public ResponseEntity<JsonResponse> ml(@RequestParam("item") String item,
 			@RequestParam("loc") String loc) {
 		LOGGER.info("*** Got ml request: item = " + item);
-		List<MlObj> objs = foodsService.ml(item, loc);
+		List<MlObj> objs = getService(loc).ml(item, loc);
 		return JsonResponse.inst("OK", HttpStatus.OK, objs).toResponseEntity();
 	}
 
 	@RequestMapping(value = "/listprods", method = RequestMethod.GET)
 	public ResponseEntity<JsonResponse> listProds(@RequestParam("loc") String loc) {
 		LOGGER.info("*** Got listProds request.");
-		List<Product> prods = foodsService.listProducts(loc);
+		List<Product> prods = getService(loc).listProducts(loc);
 		return JsonResponse.inst("OK", HttpStatus.OK, prods).toResponseEntity();
 	}
 
 	@RequestMapping(value = "/insertprod", method = RequestMethod.POST)
 	public ResponseEntity<JsonResponse> insertProduct(@RequestBody Product o) {
 		LOGGER.info("*** Got insertProduct request: " + o);
-		foodsService.insertProduct(o);
+		getService(o.getCountryCode()).insertProduct(o);
 		return JsonResponse.inst("OK", HttpStatus.OK, o).toResponseEntity();
 	}
 
@@ -110,7 +117,7 @@ public class RestApiController {
 		o.setName(name);
 		o.setPrice(price);
 		LOGGER.info("*** Got insertProductLite request: " + o);
-		foodsService.insertProduct(o);
+		getService(o.getCountryCode()).insertProduct(o);
 		return JsonResponse.inst("OK", HttpStatus.OK, o).toResponseEntity();
 	}
 }
