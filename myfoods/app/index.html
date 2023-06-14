@@ -603,6 +603,8 @@
         <!--End Invoice-->
 
         <div id="global_funcs" style="margin-top:30px;">
+          <a id="show_datamodel" style="color:#c64533; font-weight: 400; font-size: 16px;" href="./images/datamodel.png" target="_blank">Data Model</a>
+          <br><br>
           <a id="add_product" style="color:#c64533; font-weight: 400; font-size: 16px;" href="javascript:void(0)">Add Product</a>
           <br><br>
           <a id="show_reports" style="color:#c64533; font-weight: 400; font-size: 16px;" href="javascript:void(0)">Show Reports</a>
@@ -957,7 +959,7 @@
       xhr.responseType = 'json';
       xhr.send();
       xhr.onload = () => {
-        var _html = '<tr><th style="text-align:left; width:80px;">Shard</th><th style="text-align:center; width:80px;">Count</th></tr>';
+        var _html = '<tr><th style="text-align:left; width:80px;">Shard</th><th style="text-align:center; width:80px;">Orders</th></tr>';
         const jsonData = xhr.response;
         console.log(jsonData)
         for(var i=0; i<jsonData.items.items.length; i++) {
@@ -1064,9 +1066,10 @@
     function selectRegion(){
       loc = document.getElementById('sel_location').value;
       localStorage.setItem("sel_location", loc);
-      loadProducts(loc); 
-      genMap();
-      reloadMap();
+      // loadProducts(loc); 
+      // genMap();
+      // reloadMap();
+      location.reload();
     }
 
     window.addEventListener('load', function(){
