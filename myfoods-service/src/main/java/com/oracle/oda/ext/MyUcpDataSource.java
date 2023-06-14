@@ -49,13 +49,14 @@ public class MyUcpDataSource {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MyUcpDataSource.class);
 
 	@Bean("ds_shard")
-	@DependsOn({ "ds_shard_sg", "ds_shard_in", "ds_shard_au" })
+	@DependsOn({ "ds_shard_sg", "ds_shard_in", "ds_shard_au", "ds_shard_gsm" })
 	@Primary
 	public DataSource ds_shard() throws SQLException {
 		DynamicRoutingDataSource drs = new DynamicRoutingDataSource();
 		drs.addDataSource("ds_shard_sg", ds_shard_sg());
 		drs.addDataSource("ds_shard_in", ds_shard_in());
 		drs.addDataSource("ds_shard_au", ds_shard_au());
+		drs.addDataSource("ds_shard_gsm", ds_shard_gsm());
 		drs.setPrimary("ds_shard_sg");
 		return drs;
 	}
@@ -78,6 +79,13 @@ public class MyUcpDataSource {
 	@ConfigurationProperties("spring.datasource.shardau")
 	public DataSource ds_shard_au() throws SQLException {
 		LOGGER.info("*** Initialize datasource ds_shard_au.");
+		return OracleDataSourceFactory.getOracleDataSource();
+	}
+
+	@Bean("ds_shard_gsm")
+	@ConfigurationProperties("spring.datasource.shardgsm")
+	public DataSource ds_shard_gsm() throws SQLException {
+		LOGGER.info("*** Initialize datasource ds_shard_gsm.");
 		return OracleDataSourceFactory.getOracleDataSource();
 	}
 }

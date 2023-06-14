@@ -18,6 +18,7 @@ import com.oracle.oda.ext.pojos.CustomerOrder;
 import com.oracle.oda.ext.pojos.GeoJson;
 import com.oracle.oda.ext.pojos.MlObj;
 import com.oracle.oda.ext.pojos.OnlineOrder;
+import com.oracle.oda.ext.pojos.OrderReport;
 import com.oracle.oda.ext.pojos.Product;
 
 /***************************************************************************
@@ -53,4 +54,6 @@ public interface FoodsMapper {
   List<Product> listProducts();
 
   void insertProduct(Product o);
+
+  List<OrderReport> listOrderSummary();
 }

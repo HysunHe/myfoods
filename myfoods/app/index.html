@@ -130,8 +130,6 @@
       border-collapse: collapse;
     }
 
-    td {}
-
     .tabletitle {
       font-size: .3em;
       background: #EEE;
@@ -374,7 +372,7 @@
     <!-- Modal content -->
     <div class="modal-content">
       <span id="orderClose" class="close">&times;</span>
-      <div id="invoice-POS">
+      <div id="invoice-POS1">
 
         <h4> Order List</h4>
         <!--End Info-->
@@ -420,6 +418,37 @@
       <!--End Invoice-->
     </div>
 
+  </div>
+
+  <div id="prodModal" class="modal">
+    <div class="modal-content">
+      <span id="prodClose" class="close">&times;</span>
+      <div class="row">
+
+        <center>
+          <h4 style="color:#c64533">Enter your product details</h4>
+        </center>
+
+        <div id="spatial">
+          <div class="row" style="padding: 10px;">
+            <form class="form-custom">
+              <label for="pname">Product Name</label>
+              <input type="text" id="pname" name="pname">
+              <br><br>
+              <label for="pprice">Price</label>
+              <input style="width:100%" type="number" id="pprice" name="pprice">
+              <br><br>
+              <label for="pimage">Image (You can upload image in real case)</label>
+              <input style="width:100%" type="text" id="pimage" name="pimage" value="noimage.jpg">
+            </form>
+          </div>
+        </div>
+        <div class="btn-group">
+          <button class="mybutton page3-order-button1" onclick="addProd()">Confirm</button>
+          <button class="mybutton page3-order-button1" style="background-color: #898080;" id="prodCancel">Cancel</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Sidebar (hidden by default) -->
@@ -573,6 +602,15 @@
         </div>
         <!--End Invoice-->
 
+        <div id="global_funcs" style="margin-top:30px;">
+          <a id="add_product" style="color:#c64533; font-weight: 400; font-size: 16px;" href="javascript:void(0)">Add Product</a>
+          <br><br>
+          <a id="show_reports" style="color:#c64533; font-weight: 400; font-size: 16px;" href="javascript:void(0)">Show Reports</a>
+
+          <table id="order_reports" style="display: none;">
+            
+          </table>
+        </div>
       </div>
     </div>
 
@@ -841,6 +879,11 @@
     var span = document.getElementsByClassName("close")[0];
     var orderspan = document.getElementById("orderClose");
 
+    var prodBtn = document.getElementById("add_product");
+    var prodCloseBtn = document.getElementById("prodClose");
+    var prodCancelBtn = document.getElementById("prodCancel");
+    var prodModal = document.getElementById("prodModal");
+    var showReportsBtn = document.getElementById("show_reports");
 
     function delay(time) {
       return new Promise(resolve => setTimeout(resolve, time));
@@ -853,6 +896,23 @@
 
     orderbtn.onclick = function () {
       ordermodal.style.display = "block";
+    }
+
+    prodBtn.onclick = function () {
+      prodModal.style.display = "block";
+    }
+
+    prodCancelBtn.onclick = function () {
+      prodModal.style.display = "none";
+    }
+
+    prodCloseBtn.onclick = function () {
+      prodModal.style.display = "none";
+      location.reload();
+    }
+
+    showReportsBtn.onclick = function () {
+      showReports()
     }
 
     // When the user clicks on <span> (x), close the modal
@@ -873,6 +933,9 @@
       if (event.target == ordermodal) {
         ordermodal.style.display = "none";
       }
+      if (event.target == prodModal) {
+        prodModal.style.display = "none";
+      }
     }
 
     var map = genMap();
@@ -883,6 +946,27 @@
 
     function w3_close() {
       document.getElementById("mySidebar").style.display = "none";
+    }
+
+    function showReports() {
+      document.getElementById("order_reports").style.display = "block";
+      document.getElementById("order_reports").innerHTML = '<div>Loading...</div>'
+      URL = "/myfoods-service/api/ordersummary";
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', URL);
+      xhr.responseType = 'json';
+      xhr.send();
+      xhr.onload = () => {
+        var _html = '<tr><th style="text-align:left; width:80px;">Shard</th><th style="text-align:center; width:80px;">Count</th></tr>';
+        const jsonData = xhr.response;
+        console.log(jsonData)
+        for(var i=0; i<jsonData.items.items.length; i++) {
+          var item = jsonData.items.items[i]
+          _html += '<tr><td style="text-align:left;">' + item.cat + '</td><td style="text-align:center;">' + item.count + '</td></tr>' 
+        }
+        _html += '<tr><td style="text-align:left; font-weight:bold;">' + jsonData.items.cat + '</td><td style="text-align:center; font-weight:bold;">' + jsonData.items.count + '</td></tr>' 
+        document.getElementById("order_reports").innerHTML = _html
+      }
     }
 
     function loadProducts(loc) {
@@ -923,6 +1007,27 @@
         }
         document.getElementById("food").innerHTML = prod_html
       }
+    }
+
+    function addProd() {
+      URL = "/myfoods-service/api/insertprod"
+      countryCode = document.getElementById("sel_country_code").value;
+      pname = document.getElementById("pname").value;
+      pprice = document.getElementById("pprice").value;
+      pimage = document.getElementById("pimage").value;
+      var obj = '{'
+        +'"countryCode"  : "'+countryCode+'",'
+        +'"name"  : "'+pname+'",'
+        +'"price" : "'+pprice+'",'
+        +'"image" : "'+pimage+'"'
+        +'}';
+
+      console.log(obj)
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', URL);
+      xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+      xhr.send(obj);
+      location.reload();  
     }
 
     function getCenterPos(){

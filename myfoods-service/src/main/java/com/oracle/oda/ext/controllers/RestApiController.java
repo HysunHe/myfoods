@@ -29,8 +29,10 @@ import com.oracle.oda.ext.pojos.GeoJson;
 import com.oracle.oda.ext.pojos.JsonResponse;
 import com.oracle.oda.ext.pojos.MlObj;
 import com.oracle.oda.ext.pojos.OnlineOrder;
+import com.oracle.oda.ext.pojos.OrderReport;
 import com.oracle.oda.ext.pojos.Product;
 import com.oracle.oda.ext.services.FoodsService;
+import com.oracle.oda.ext.services.FoodsService_GSM;
 import com.oracle.oda.ext.utils.StringUtil;
 
 /***************************************************************************
@@ -59,6 +61,9 @@ public class RestApiController {
 
 	@Autowired
 	private ApplicationContext applicationContext;
+
+	@Autowired
+	private FoodsService_GSM foodservice_gsm;
 
 	private FoodsService getService(String key) {
 		assert !StringUtil.isBlank(key);
@@ -99,14 +104,14 @@ public class RestApiController {
 	@RequestMapping(value = "/listprods", method = RequestMethod.GET)
 	public ResponseEntity<JsonResponse> listProds(@RequestParam("loc") String loc) {
 		LOGGER.info("*** Got listProds request.");
-		List<Product> prods = getService(loc).listProducts(loc);
+		List<Product> prods = foodservice_gsm.listProducts(loc);
 		return JsonResponse.inst("OK", HttpStatus.OK, prods).toResponseEntity();
 	}
 
 	@RequestMapping(value = "/insertprod", method = RequestMethod.POST)
 	public ResponseEntity<JsonResponse> insertProduct(@RequestBody Product o) {
 		LOGGER.info("*** Got insertProduct request: " + o);
-		getService(o.getCountryCode()).insertProduct(o);
+		foodservice_gsm.insertProduct(o);
 		return JsonResponse.inst("OK", HttpStatus.OK, o).toResponseEntity();
 	}
 
@@ -117,7 +122,14 @@ public class RestApiController {
 		o.setName(name);
 		o.setPrice(price);
 		LOGGER.info("*** Got insertProductLite request: " + o);
-		getService(o.getCountryCode()).insertProduct(o);
+		foodservice_gsm.insertProduct(o);
 		return JsonResponse.inst("OK", HttpStatus.OK, o).toResponseEntity();
+	}
+
+	@RequestMapping(value = "/ordersummary", method = RequestMethod.GET)
+	public ResponseEntity<JsonResponse> getOrderSummary() {
+		LOGGER.info("*** Got getOrderSummary request.");
+		OrderReport summary = foodservice_gsm.listOrderSummary();
+		return JsonResponse.inst("OK", HttpStatus.OK, summary).toResponseEntity();
 	}
 }

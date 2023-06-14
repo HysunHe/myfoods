@@ -128,4 +128,12 @@
 			#{image, jdbcType=VARCHAR}
 		)
 	</insert>
+
+	<select id="listOrderSummary" resultType="com.oracle.oda.ext.pojos.OrderReport">
+        select 
+            country_code as cat, 
+            count(*) as count
+        from customer_order 
+        group by country_code
+	</select>
 </mapper>

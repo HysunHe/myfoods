@@ -24,7 +24,6 @@ import com.oracle.oda.ext.pojos.CustomerOrder;
 import com.oracle.oda.ext.pojos.GeoJson;
 import com.oracle.oda.ext.pojos.MlObj;
 import com.oracle.oda.ext.pojos.OnlineOrder;
-import com.oracle.oda.ext.pojos.Product;
 import com.oracle.oda.ext.utils.DateUtil;
 
 /***************************************************************************
@@ -98,27 +97,6 @@ public class FoodsService {
             return new ArrayList<MlObj>();
         } catch (Exception e) {
             LOGGER.error("!!! ml failed: ", e);
-            throw new ApplicationException(e);
-        }
-    }
-
-    public List<Product> listProducts(String countryCode) {
-        MyShardingKeyContext.setShardingKey(countryCode);
-        try {
-            return mapper.listProducts();
-        } catch (Exception e) {
-            LOGGER.error("!!! listProducts failed: ", e);
-            throw new ApplicationException(e);
-        }
-    }
-
-    public void insertProduct(Product o) throws ApplicationException {
-        LOGGER.info("*** Inserting Product: " + o);
-        MyShardingKeyContext.setShardingKey(o.getCountryCode());
-        try {
-            mapper.insertProduct(o);
-        } catch (Exception e) {
-            LOGGER.error("!!! Error saving Product: " + o, e);
             throw new ApplicationException(e);
         }
     }
