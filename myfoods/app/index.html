@@ -461,7 +461,7 @@
 
 
 
-  <input type="hidden" id="sel_country_code" value="" />
+  <!-- <input type="hidden" id="sel_country_code" value="" /> -->
 
   <!-- Top menu -->
   <div class="w3-top">
@@ -910,7 +910,7 @@
 
     prodCloseBtn.onclick = function () {
       prodModal.style.display = "none";
-      location.reload();
+      // location.reload();
     }
 
     showReportsBtn.onclick = function () {
@@ -1013,7 +1013,8 @@
 
     function addProd() {
       URL = "/myfoods-service/api/insertprod"
-      countryCode = document.getElementById("sel_country_code").value;
+      // countryCode = document.getElementById("sel_country_code").value;
+      countryCode = document.getElementById('sel_location').value;
       pname = document.getElementById("pname").value;
       pprice = document.getElementById("pprice").value;
       pimage = document.getElementById("pimage").value;
@@ -1075,6 +1076,7 @@
     window.addEventListener('load', function(){
       var loc = localStorage.getItem("sel_location") || 'SG';
       document.getElementById('sel_location').value = loc;
+      localStorage.setItem("sel_location", loc);
 
       loadProducts(document.getElementById('sel_location').value);
       reloadMap();
@@ -1143,7 +1145,11 @@
       console.log(address);
       card = document.getElementById("card").value;
       console.log(card);
-      countryCode = document.getElementById("sel_country_code").value;
+      countryCode = document.getElementById('sel_location').value;
+      if (countryCode === null) {
+        countryCode = localStorage.getItem("sel_location");
+      }
+      // countryCode = document.getElementById("sel_country_code").value;
       console.log(countryCode);
 
       now = Date.now();
@@ -1176,7 +1182,11 @@
       // Increase count for the food item if exists
 
       const jsonItemsCountArray = jsonItemsObject.items;
-      var countryCode = document.getElementById("sel_country_code").value;
+      // var countryCode = document.getElementById("sel_country_code").value;
+      var countryCode = document.getElementById('sel_location').value;
+      if (countryCode === null) {
+        countryCode = localStorage.getItem("sel_location");
+      }
 
       for (let i = 0; i < jsonItemsCountArray.length; i++) {
         let obj = jsonItemsCountArray[i];
@@ -1533,7 +1543,7 @@
       restaurant_id = null;
       restaurant_address = document.querySelector('input[name="JTP"]:checked').value;
       country_code = document.querySelector('input[name="JTP"]:checked').attributes['data-country-code'].value
-      document.getElementById("sel_country_code").value = country_code;
+      // document.getElementById("sel_country_code").value = country_code;
       restaurant_latlng = null;
     }
 
