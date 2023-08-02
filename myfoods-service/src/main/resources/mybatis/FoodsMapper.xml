@@ -136,4 +136,12 @@
         from customer_order 
         group by country_code
 	</select>
+
+	<select id="rankProds" resultType="com.oracle.oda.ext.pojos.ProdStat">
+        select p.NAME, SUM(QUANTITY) as COUNT 
+        from PRODUCTS p, ONLINE_ORDER_ITEMS o 
+        where o.item_id = p.name GROUP BY p.NAME 
+        ORDER BY COUNT DESC 
+        fetch first 5 rows only
+	</select>
 </mapper>

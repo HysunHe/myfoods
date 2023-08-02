@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Oracle MyFood</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma">
+    <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+    <style>
+      body,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Karma", sans-serif
+      }
+    </style>
+
+    <script src="echarts.js"></script>
+
+</head>
+
+<body>
+    <div id="summary_chart" style="width: 100%;"></div>
+
+    <div id="prod_rank" style="width: 100%;"></div>
+
+    <script type="text/javascript">
+        console.log('Load chart data...')
+        var summaryChart = echarts.init(document.getElementById('summary_chart'));
+
+        URL = "/myfoods-service/api/ordersummary";
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', URL);
+        xhr.responseType = 'json';
+        xhr.send();
+        xhr.onload = () => {
+            const jsonData = xhr.response;
+            total_orders = jsonData.items.count
+            let data_legend = [], chart_data = []
+            for(var i=0; i<jsonData.items.items.length; i++) {
+                var item = jsonData.items.items[i]
+                data_legend.push(item.cat)
+                chart_data.push({ value: item.count, name: item.cat, label: {formatter: '{b} ({c})'}})
+            }
+            option = {
+                title: {
+                    text: 'Total Number of Orders: ' + total_orders,
+                    subtext: 'Statistics',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b} : {c} ({d}%)'
+                },
+                legend: {
+                    bottom: 10,
+                    left: 'center',
+                    data: data_legend
+                },
+                series: [{
+                    type: 'pie',
+                    radius: '65%',
+                    center: ['50%', '50%'],
+                    selectedMode: 'single',
+                    data: chart_data,
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }]
+            };
+            summaryChart.setOption(option);
+        }
+
+        summaryChart.on('click', function(param){
+          let shard = param.name
+
+          URL = "/myfoods-service/api/ordersummary";
+          const xhr = new XMLHttpRequest();
+          xhr.open('GET', URL);
+          xhr.responseType = 'json';
+          xhr.send();
+          xhr.onload = () => {
+            var _html = '<tr><th style="text-align:left; width:80px;">Shard</th><th style="text-align:center; width:80px;">Orders</th></tr>';
+            const jsonData = xhr.response;
+            console.log(jsonData)
+            for(var i=0; i<jsonData.items.items.length; i++) {
+              var item = jsonData.items.items[i]
+              _html += '<tr><td style="text-align:left;">' + item.cat + '</td><td style="text-align:center;">' + item.count + '</td></tr>' 
+            }
+            _html += '<tr><td style="text-align:left; font-weight:bold;">' + jsonData.items.cat + '</td><td style="text-align:center; font-weight:bold;">' + jsonData.items.count + '</td></tr>' 
+            document.getElementById("order_reports").innerHTML = _html
+          }
+        });
+    </script>
+</body>
+
+</html>
