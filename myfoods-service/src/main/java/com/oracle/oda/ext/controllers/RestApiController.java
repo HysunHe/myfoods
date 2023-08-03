@@ -30,6 +30,7 @@ import com.oracle.oda.ext.pojos.JsonResponse;
 import com.oracle.oda.ext.pojos.MlObj;
 import com.oracle.oda.ext.pojos.OnlineOrder;
 import com.oracle.oda.ext.pojos.OrderReport;
+import com.oracle.oda.ext.pojos.ProdOrderDetail;
 import com.oracle.oda.ext.pojos.ProdStat;
 import com.oracle.oda.ext.pojos.Product;
 import com.oracle.oda.ext.services.FoodsService;
@@ -138,6 +139,14 @@ public class RestApiController {
 	public ResponseEntity<JsonResponse> randProds(@RequestParam("loc") String loc) {
 		LOGGER.info("*** Got randProds request.");
 		List<ProdStat> prods = getService(loc).rankProds(loc);
+		return JsonResponse.inst("OK", HttpStatus.OK, prods).toResponseEntity();
+	}
+
+	@RequestMapping(value = "/orderdetails", method = RequestMethod.GET)
+	public ResponseEntity<JsonResponse> getOrderDetails(@RequestParam("loc") String loc,
+			@RequestParam("prod") String prod) {
+		LOGGER.info("*** Got getOrderDetails request.");
+		List<ProdOrderDetail> prods = getService(loc).getOrderDetails(loc, prod);
 		return JsonResponse.inst("OK", HttpStatus.OK, prods).toResponseEntity();
 	}
 }

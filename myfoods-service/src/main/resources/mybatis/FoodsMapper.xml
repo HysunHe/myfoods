@@ -144,4 +144,14 @@
         ORDER BY COUNT DESC 
         fetch first 5 rows only
 	</select>
+
+	<select id="getOrderDetails" resultType="com.oracle.oda.ext.pojos.ProdOrderDetail">
+        select o.ORDER_ID as orderNo, 
+            o.NAME as customer, 
+            p.NAME as product, 
+            i.QUANTITY as quantity 
+        from PRODUCTS p, ONLINE_ORDER_ITEMS i, CUSTOMER_ORDER o 
+        where i.item_id = p.name and i.ORDER_ID = o.ORDER_ID
+            and p.NAME = #{prod}
+	</select>
 </mapper>

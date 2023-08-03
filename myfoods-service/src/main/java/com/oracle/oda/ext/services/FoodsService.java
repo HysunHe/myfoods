@@ -24,6 +24,7 @@ import com.oracle.oda.ext.pojos.CustomerOrder;
 import com.oracle.oda.ext.pojos.GeoJson;
 import com.oracle.oda.ext.pojos.MlObj;
 import com.oracle.oda.ext.pojos.OnlineOrder;
+import com.oracle.oda.ext.pojos.ProdOrderDetail;
 import com.oracle.oda.ext.pojos.ProdStat;
 import com.oracle.oda.ext.utils.DateUtil;
 
@@ -108,6 +109,16 @@ public class FoodsService {
             return mapper.rankProds();
         } catch (Exception e) {
             LOGGER.error("!!! rankProds failed: ", e);
+            throw new ApplicationException(e);
+        }
+    }
+
+    public List<ProdOrderDetail> getOrderDetails(String countryCode, String prod) {
+        MyShardingKeyContext.setShardingKey(countryCode);
+        try {
+            return mapper.getOrderDetails(prod);
+        } catch (Exception e) {
+            LOGGER.error("!!! getOrderDetails failed: " + prod, e);
             throw new ApplicationException(e);
         }
     }

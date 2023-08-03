@@ -10,25 +10,51 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma">
     <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
     <style>
-      body,
-      h1,
-      h2,
-      h3,
-      h4,
-      h5,
-      h6 {
-        font-family: "Karma", sans-serif
-      }
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: "Karma", sans-serif
+        }
     </style>
-
+    <link rel="stylesheet" href="jquery.dataTables.min.css">
     <script src="echarts.js"></script>
-
+    <script src="jquery-3.7.0.min.js"></script>
+    <script src="jquery.dataTables.min.js"></script>
 </head>
 
 <body>
-    <div id="summary_chart" style="width: 100%;"></div>
+  <!-- Top menu -->
+  <div class="w3-top">
+    <div class="w3-white w3-xlarge" style="max-width:1200px;margin:auto">
 
-    <div id="prod_rank" style="width: 100%;"></div>
+      <div class="w3-left w3-padding-16">
+        <img src="./images/logo.png" style="width:5%;height:5%; background-color: #a4ebf55c;">MyFoods</img>
+        <div style="float:right;font-size:20px;font-weight: 700;">
+          <span>Data Analytics</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="page1" class="w3-main w3-content " style="max-width:1200px;margin-top:100px;">
+    <div id="summary_chart" style="width: 100%; height: 400px;"></div>
+
+    <div id="prod_rank" style="padding-left:100px; margin-top:50px; width: 100%; height: 400px;"></div>
+
+    <table id="order_details" style="width: 100%; visibility: hidden;">
+        <thead>
+            <tr>
+                <th>OrderNo.</th>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+    </table>
 
     <script type="text/javascript">
         console.log('Load chart data...')
@@ -43,10 +69,10 @@
             const jsonData = xhr.response;
             total_orders = jsonData.items.count
             let data_legend = [], chart_data = []
-            for(var i=0; i<jsonData.items.items.length; i++) {
+            for (var i = 0; i < jsonData.items.items.length; i++) {
                 var item = jsonData.items.items[i]
                 data_legend.push(item.cat)
-                chart_data.push({ value: item.count, name: item.cat, label: {formatter: '{b} ({c})'}})
+                chart_data.push({ value: item.count, name: item.cat, label: { formatter: '{b} ({c})' } })
             }
             option = {
                 title: {
@@ -81,25 +107,70 @@
             summaryChart.setOption(option);
         }
 
-        summaryChart.on('click', function(param){
-          let shard = param.name
-
-          URL = "/myfoods-service/api/ordersummary";
-          const xhr = new XMLHttpRequest();
-          xhr.open('GET', URL);
-          xhr.responseType = 'json';
-          xhr.send();
-          xhr.onload = () => {
-            var _html = '<tr><th style="text-align:left; width:80px;">Shard</th><th style="text-align:center; width:80px;">Orders</th></tr>';
-            const jsonData = xhr.response;
-            console.log(jsonData)
-            for(var i=0; i<jsonData.items.items.length; i++) {
-              var item = jsonData.items.items[i]
-              _html += '<tr><td style="text-align:left;">' + item.cat + '</td><td style="text-align:center;">' + item.count + '</td></tr>' 
+        summaryChart.on('click', function (param) {
+            prodRankDom = document.getElementById('prod_rank');
+            const loc = param.name
+            var prodRankChart = echarts.init(prodRankDom);
+            URL = "/myfoods-service/api/rankprods?loc=" + param.name;
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', URL);
+            xhr.responseType = 'json';
+            xhr.send();
+            xhr.onload = () => {
+                const jsonData = xhr.response;
+                let data_legend = [], chart_data = []
+                for (var i = 0; i < jsonData.items.length; i++) {
+                    var item = jsonData.items[i]
+                    data_legend.push(item.name)
+                    chart_data.push(item.count)
+                }
+                option = {
+                    title: {
+                        text: 'Popular Products (Per # of orders)'
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'
+                        }
+                    },
+                    xAxis: {
+                        type: 'value'
+                    },
+                    yAxis: {
+                        type: 'category',
+                        data: data_legend
+                    },
+                    series: [
+                        {
+                            type: 'bar',
+                            data: chart_data
+                        }
+                    ]
+                };
+                prodRankChart.setOption(option)
             }
-            _html += '<tr><td style="text-align:left; font-weight:bold;">' + jsonData.items.cat + '</td><td style="text-align:center; font-weight:bold;">' + jsonData.items.count + '</td></tr>' 
-            document.getElementById("order_reports").innerHTML = _html
-          }
+            prodRankChart.on('click', function (param) {
+                $.ajax({
+                    method: "GET",
+                    url: '/myfoods-service/api/orderdetails?loc=' + loc + '&prod=' + param.name
+                }).done (function(data) {
+                    $('#order_details').dataTable({
+                        destroy: true,
+                        paging: false,
+                        searching: false,
+                        ordering:  false,
+                        data: data.items,
+                        columns: [
+                            { data: 'orderNo' },
+                            { data: 'customer' },
+                            { data: 'product' },
+                            { data: 'quantity' }
+                        ]
+                    });
+                    $('#order_details').css('visibility', 'visible')
+                });
+            });
         });
     </script>
 </body>
